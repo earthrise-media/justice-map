@@ -83,7 +83,12 @@ function Map(props: any, ref: React.Ref<unknown>) {
         container: mapDivRef.current,
         style: "mapbox://styles/tmcw/ckkpwot3j10mt17p1y4ecfvgx",
         boxZoom: false,
-        bounds: [-129.375, 18.646245142670608, -62.9296875, 53.54030739150022],
+        bounds: [
+          -127.17773437499999,
+          31.052933985705163,
+          -111.62109375,
+          43.13306116240612,
+        ],
         minZoom: 4,
         maxZoom: 17,
         dragRotate: false,

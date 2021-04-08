@@ -1,12 +1,12 @@
 import mapboxgl from "mapbox-gl";
 import { FeatureCollection } from "geojson";
 
-const defaultStyle = "mapbox://styles/tmcw/ckkpwot3j10mt17p1y4ecfvgx";
+const defaultStyle = "mapbox://styles/mikelmaron/ckmxwzmzq19pp17pr9j778ik8";
 
 type ClickEvent = mapboxgl.MapMouseEvent & mapboxgl.EventData;
 
 const accessToken =
-  "pk.eyJ1IjoidG1jdyIsImEiOiJja2YzMmc3YnkxbWhzMzJudXk2c2x3MTVhIn0.XZpElz19TDemsBc0yvkRPw";
+  "pk.eyJ1IjoibWlrZWxtYXJvbiIsImEiOiJjaWZlY25lZGQ2cTJjc2trbmdiZDdjYjllIn0.Wx1n0X7aeCQyDTnK6_mrGw";
 
 async function loadAndAugmentStyle(styleId: string) {
   // TODO: cheap way of doing this. instead, we may want to
@@ -72,6 +72,12 @@ export default class PMap {
   ) {
     mapboxgl.accessToken = accessToken;
     const map = new mapboxgl.Map(options);
+    map.setPadding({
+      left: 400,
+      top: 0,
+      bottom: 0,
+      right: 0,
+    });
     map.addControl(
       new mapboxgl.AttributionControl({
         compact: true,
