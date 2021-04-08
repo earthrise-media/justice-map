@@ -72,12 +72,6 @@ export default class PMap {
   ) {
     mapboxgl.accessToken = accessToken;
     const map = new mapboxgl.Map(options);
-    map.setPadding({
-      left: 400,
-      top: 0,
-      bottom: 0,
-      right: 0,
-    });
     map.addControl(
       new mapboxgl.AttributionControl({
         compact: true,
