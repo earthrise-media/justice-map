@@ -6,7 +6,7 @@ import React, {
   forwardRef,
 } from "react";
 import { FeatureCollection } from "geojson";
-import PMap, { PMapHandlers, LayerScopedEvent, planetLayers } from "@/lib/pmap";
+import PMap, { PMapHandlers, LayerScopedEvent } from "@/lib/pmap";
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN!;
 
