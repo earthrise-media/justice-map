@@ -1,6 +1,6 @@
 module.exports = process.env.CI
   ? {
-      assetPrefix: "/justice40/",
+      assetPrefix: "/justice-map/",
       future: {
         webpack5: true,
       },
