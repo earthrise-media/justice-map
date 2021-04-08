@@ -103,17 +103,7 @@ function Map(props: any, ref: React.Ref<unknown>) {
     };
   }, [mapRef, mapDivRef]);
 
-  return (
-    <>
-      <div
-        ref={mapDivRef}
-        style={{
-          position: "absolute",
-        }}
-        className="bg-gray-200 inset-0"
-      ></div>
-    </>
-  );
+  return <div ref={mapDivRef} className="flex-auto bg-gray-200"></div>;
 }
 
 export default forwardRef(Map);
