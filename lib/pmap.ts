@@ -5,6 +5,8 @@ const defaultStyle = "mapbox://styles/mikelmaron/ckmxwzmzq19pp17pr9j778ik8";
 
 type ClickEvent = mapboxgl.MapMouseEvent & mapboxgl.EventData;
 
+const targetLayer = "ejscreen-2020-ca-d-pm25-2-dissolve";
+
 const accessToken =
   "pk.eyJ1IjoibWlrZWxtYXJvbiIsImEiOiJjaWZlY25lZGQ2cTJjc2trbmdiZDdjYjllIn0.Wx1n0X7aeCQyDTnK6_mrGw";
 
@@ -53,7 +55,7 @@ export type LayerScopedEvent = mapboxgl.MapMouseEvent & {
 
 export type PMapHandlers = {
   onClick: (e: ClickEvent) => void;
-  onMouseEnter: (e: LayerScopedEvent) => void;
+  onMouseMove: (e: LayerScopedEvent) => void;
   onMouseLeave: (e: LayerScopedEvent) => void;
 };
 
@@ -79,6 +81,8 @@ export default class PMap {
     );
     map.getCanvas().style.cursor = "default";
     map.on("click", this.onClick);
+    map.on("mousemove", targetLayer, this.onMouseMove);
+    map.on("mouseleave", targetLayer, this.onMouseLeave);
 
     this.setStyle(defaultStyle).then(() => {
       // this.setData(defaultData);
@@ -92,8 +96,8 @@ export default class PMap {
     this.handlers.current.onClick(e);
   };
 
-  onMouseEnter = (e: LayerScopedEvent) => {
-    this.handlers.current.onMouseEnter(e);
+  onMouseMove = (e: LayerScopedEvent) => {
+    this.handlers.current.onMouseMove(e);
   };
 
   onMouseLeave = (e: LayerScopedEvent) => {

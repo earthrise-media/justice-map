@@ -54,11 +54,12 @@ const indicators = [
   { short: "PM2.5", long: "PM2.5 level in air", color: "blue" },
 ];
 
-function IndicatorSelection() {
+function IndicatorSelection({ onClose }: { onClose: () => void }) {
   return (
     <div className="pt-3">
       {indicators.map((indicator) => (
         <button
+          onClick={() => onClose()}
           className={`text-lg py-1 font-bold block text-${indicator.color}-600`}
         >
           {indicator.short}
@@ -104,7 +105,7 @@ export default function Home() {
               </svg>
             </button>
             {indicatorsMenu ? (
-              <IndicatorSelection />
+              <IndicatorSelection onClose={() => setIndicatorsMenu(false)} />
             ) : (
               <>
                 <div className="flex pt-3 items-center text-purple-600">
@@ -128,7 +129,13 @@ export default function Home() {
                   PM<sub>2.5</sub> describes fine inhalable particles, with
                   diameters that are generally 2.5 micrometers and smaller.
                   Under the Clean Air Act, EPA sets and reviews national air
-                  quality standards for PM.
+                  quality standards for PM.{" / "}
+                  <a
+                    className="underline text-blue-500"
+                    href="https://www.epa.gov/air-trends/particulate-matter-pm25-trends"
+                  >
+                    Source: EPA.gov
+                  </a>
                 </div>
               </>
             )}
