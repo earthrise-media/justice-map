@@ -5,43 +5,24 @@ import React, {
   useImperativeHandle,
   forwardRef,
 } from "react";
-import { FeatureCollection } from "geojson";
 import PMap, { PMapHandlers, LayerScopedEvent } from "@/lib/pmap";
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN!;
 
 type ClickEvent = mapboxgl.MapMouseEvent & mapboxgl.EventData;
 
-let hoveredId: number;
-
-function onMouseEnter(e: LayerScopedEvent) {
-  const map = e.target;
-  map.setFeatureState(
-    {
-      source: "features",
-      id: e.features[0].id,
-    },
-    {
-      state: "hover",
-    }
-  );
-  hoveredId = e.features[0].id as number;
-  map.getCanvas().style.cursor = "pointer";
+function pmTooltip(feature: mapboxgl.MapboxGeoJSONFeature) {
+  const properties = feature.properties;
+  return `<div class='flex flex-col items-center w-32'>
+    <div class="text-2xl font-bold text-gray-800">${properties.D_PM25_2.toLocaleString()}</div>
+    <div class="text-purple-400 text-md font-bold pt-1">PM<sub>2.5</sub> index</div>
+  </div>`;
 }
 
-function onMouseLeave(e: LayerScopedEvent) {
-  const map = e.target;
-  if (hoveredId !== null) {
-    map.removeFeatureState({
-      source: "features",
-      id: hoveredId,
-    });
-    hoveredId = null;
-  }
-  map.getCanvas().style.cursor = "default";
-}
+type MapProps = {};
 
-function Map(props: any, ref: React.Ref<unknown>) {
+function Map(props: MapProps, ref: React.Ref<unknown>) {
+  const hoverPopup = useRef<mapboxgl.Popup | null>(null);
   const mapRef = useRef<PMap>(null);
   const mapDivRef = useRef<HTMLDivElement>(null);
 
@@ -50,6 +31,41 @@ function Map(props: any, ref: React.Ref<unknown>) {
       padding: 200,
       animate: false,
     });
+  }
+
+  function onMouseMove(e: LayerScopedEvent) {
+    const map = e.target;
+    if (e.features.length == 0) return;
+    const feature = e.features[0];
+
+    if (feature.properties.D_PM25_2 > 0) {
+      map.getCanvas().style.cursor = "pointer";
+
+      if (!hoverPopup.current) {
+        hoverPopup.current = new mapboxgl.Popup({
+          closeOnClick: false,
+          closeButton: false,
+          offset: [0, -2],
+        });
+      }
+
+      const content = pmTooltip(feature);
+
+      hoverPopup.current.setLngLat(e.lngLat).setHTML(content).addTo(map);
+    } else {
+      map.getCanvas().style.cursor = "default";
+      if (hoverPopup.current) {
+        hoverPopup.current.remove();
+      }
+    }
+  }
+
+  function onMouseLeave(e: LayerScopedEvent) {
+    const map = e.target;
+    map.getCanvas().style.cursor = "default";
+    if (hoverPopup.current) {
+      hoverPopup.current.remove();
+    }
   }
 
   function setCenter(coord: mapboxgl.LngLatLike) {
@@ -71,7 +87,7 @@ function Map(props: any, ref: React.Ref<unknown>) {
 
   mapHandlers.current = {
     onClick,
-    onMouseEnter,
+    onMouseMove,
     onMouseLeave,
   };
 
