@@ -74,15 +74,16 @@ export default class PMap {
   ) {
     mapboxgl.accessToken = accessToken;
     const map = new mapboxgl.Map(options);
-    map.addControl(
-      new mapboxgl.AttributionControl({
-        compact: true,
-      })
-    );
     map.getCanvas().style.cursor = "default";
     map.on("click", this.onClick);
     map.on("mousemove", targetLayer, this.onMouseMove);
     map.on("mouseleave", targetLayer, this.onMouseLeave);
+
+    map.addControl(
+      new mapboxgl.NavigationControl({
+        showCompass: false,
+      })
+    );
 
     this.setStyle(defaultStyle).then(() => {
       // this.setData(defaultData);

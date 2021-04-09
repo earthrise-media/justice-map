@@ -105,10 +105,10 @@ function Map(props: MapProps, ref: React.Ref<unknown>) {
           -111.62109375,
           43.13306116240612,
         ],
+        maxPitch: 0,
         minZoom: 4,
         maxZoom: 17,
         dragRotate: false,
-        attributionControl: false,
       },
       mapHandlers
     );
