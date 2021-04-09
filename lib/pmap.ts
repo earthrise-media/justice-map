@@ -20,31 +20,31 @@ async function loadAndAugmentStyle(styleId: string) {
 
   const style = (await (await fetch(url)).json()) as mapboxgl.Style;
 
-  style.sources!["ej"] = {
-    type: "vector",
-    tiles: ["http://localhost:4000/{z}/{x}/{y}.pbf"],
-    maxzoom: 10,
-    minzoom: 4,
-  };
+  // style.sources!["ej"] = {
+  //   type: "vector",
+  //   tiles: ["http://localhost:4000/{z}/{x}/{y}.pbf"],
+  //   maxzoom: 10,
+  //   minzoom: 4,
+  // };
 
-  style.layers.push({
-    id: "ej",
-    source: "ej",
-    "source-layer": "EJSCREEN_2020_USPRgeojsonl",
-    type: "fill",
-    paint: {
-      "fill-antialias": false,
-      "fill-color": [
-        "interpolate",
-        ["linear"],
-        ["get", "CANCER"],
-        0,
-        "rgba(33,102,172,0)",
-        100,
-        "rgb(178,24,43)",
-      ],
-    },
-  });
+  // style.layers.push({
+  //   id: "ej",
+  //   source: "ej",
+  //   "source-layer": "EJSCREEN_2020_USPRgeojsonl",
+  //   type: "fill",
+  //   paint: {
+  //     "fill-antialias": false,
+  //     "fill-color": [
+  //       "interpolate",
+  //       ["linear"],
+  //       ["get", "CANCER"],
+  //       0,
+  //       "rgba(33,102,172,0)",
+  //       100,
+  //       "rgb(178,24,43)",
+  //     ],
+  //   },
+  // });
 
   return style;
 }
