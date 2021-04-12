@@ -5,7 +5,7 @@ const defaultStyle = "mapbox://styles/mikelmaron/ckmxwzmzq19pp17pr9j778ik8";
 
 type ClickEvent = mapboxgl.MapMouseEvent & mapboxgl.EventData;
 
-const targetLayer = "ejscreen-2020-ca-d-pm25-2-dissolve";
+const targetLayer = "ejscreen-2020-ca-d-pm25-2-dissolve copy";
 
 const accessToken =
   "pk.eyJ1IjoibWlrZWxtYXJvbiIsImEiOiJjaWZlY25lZGQ2cTJjc2trbmdiZDdjYjllIn0.Wx1n0X7aeCQyDTnK6_mrGw";

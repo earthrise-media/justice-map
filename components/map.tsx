@@ -97,7 +97,7 @@ function Map(props: MapProps, ref: React.Ref<unknown>) {
     mapRef.current = new PMap(
       {
         container: mapDivRef.current,
-        style: "mapbox://styles/tmcw/ckkpwot3j10mt17p1y4ecfvgx",
+        style: "mapbox://styles/mikelmaron/ckmxwzmzq19pp17pr9j778ik8",
         boxZoom: false,
         bounds: [
           -127.17773437499999,
