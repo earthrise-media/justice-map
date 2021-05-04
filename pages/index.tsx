@@ -74,6 +74,7 @@ function IndicatorSelection({ onClose }: { onClose: () => void }) {
 
 export default function Home() {
   const [viewportData, setViewportData] = useState<ViewportData>(null);
+  const [filter, setFilter] = useState<[number, number]>([-1500, 1500]);
   const [indicatorsMenu, setIndicatorsMenu] = useState<boolean>(false);
   const { observe, width } = useDimensions();
   return (
@@ -162,10 +163,14 @@ export default function Home() {
                     </div>
                     <div className="pt-8">
                       <div ref={observe} />
-                      <div className="pt-4 border-t border-gray-200 text-sm font-bold">
+                      <div className="pt-4 pb-4 border-t border-gray-200 text-sm font-bold">
                         PM2.5 indexes
                       </div>
-                      <Chart data={viewportData.pm25} width={width} />
+                      <Chart
+                        data={viewportData.pm25}
+                        width={width}
+                        setFilter={setFilter}
+                      />
                     </div>
                   </div>
                 ) : null}
@@ -174,7 +179,7 @@ export default function Home() {
           </div>
         </div>
       </div>
-      <Map setViewportData={setViewportData} />
+      <Map filter={filter} setViewportData={setViewportData} />
     </div>
   );
 }
