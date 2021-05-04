@@ -137,6 +137,14 @@ export default function Home() {
                     Source: EPA.gov
                   </a>
                 </div>
+                <div id="stat" style={{'display':'none'}}>
+                  <div className="flex pt-3 items-center text-purple-600">
+                    <div className="font-bold text-3xl">BLK GRP #<span id="blocks"></span></div>
+                  </div>
+                  <div className="flex pt-3 items-center text-purple-600">
+                    <div className="font-bold text-3xl">POP #<span id="pop"></span></div>
+                  </div>
+                </div>
               </>
             )}
           </div>

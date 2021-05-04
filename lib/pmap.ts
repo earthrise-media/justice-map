@@ -5,7 +5,8 @@ const defaultStyle = "mapbox://styles/mikelmaron/ckmxwzmzq19pp17pr9j778ik8";
 
 type ClickEvent = mapboxgl.MapMouseEvent & mapboxgl.EventData;
 
-const targetLayer = "ejscreen-2020-ca-d-pm25-2-dissolve copy";
+const dissolveLayer = "ejscreen-2020-ca-d-pm25-2-dissolve copy";
+const targetLayer = "cali-projected-6z3k79 copy"
 
 const accessToken =
   "pk.eyJ1IjoibWlrZWxtYXJvbiIsImEiOiJjaWZlY25lZGQ2cTJjc2trbmdiZDdjYjllIn0.Wx1n0X7aeCQyDTnK6_mrGw";
@@ -57,6 +58,7 @@ export type PMapHandlers = {
   onClick: (e: ClickEvent) => void;
   onMouseMove: (e: LayerScopedEvent) => void;
   onMouseLeave: (e: LayerScopedEvent) => void;
+  onMoveEnd: (e: DragEvent) => void;
 };
 
 export default class PMap {
@@ -74,10 +76,14 @@ export default class PMap {
   ) {
     mapboxgl.accessToken = accessToken;
     const map = new mapboxgl.Map(options);
+
     map.getCanvas().style.cursor = "default";
     map.on("click", this.onClick);
+    map.on("mousemove", dissolveLayer, this.onMouseMove);
+    map.on("mouseleave", dissolveLayer, this.onMouseLeave);
     map.on("mousemove", targetLayer, this.onMouseMove);
     map.on("mouseleave", targetLayer, this.onMouseLeave);
+    map.on("moveend", this.onMoveEnd);
 
     map.addControl(
       new mapboxgl.NavigationControl({
@@ -104,6 +110,10 @@ export default class PMap {
   onMouseLeave = (e: LayerScopedEvent) => {
     this.handlers.current.onMouseLeave(e);
   };
+
+  onMoveEnd = (e: DragEvent) => {
+    this.handlers.current.onMoveEnd(e);
+  }
 
   async setData(geojson: FeatureCollection) {
     if (geojson === this.lastGeoJSON) {
