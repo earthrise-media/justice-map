@@ -1,7 +1,9 @@
 import { useState } from "react";
 import Head from "next/head";
 import Map from "@/components/map";
+import Chart from "@/components/chart";
 import { ViewportData } from "../types";
+import useDimensions from "react-cool-dimensions";
 
 type Indicator = {
   long: string;
@@ -73,6 +75,7 @@ function IndicatorSelection({ onClose }: { onClose: () => void }) {
 export default function Home() {
   const [viewportData, setViewportData] = useState<ViewportData>(null);
   const [indicatorsMenu, setIndicatorsMenu] = useState<boolean>(false);
+  const { observe, width } = useDimensions();
   return (
     <div className="min-h-screen bg-gray-200 flex items-stretch">
       <Head>
@@ -156,6 +159,13 @@ export default function Home() {
                           <div className="text-sm">Blockgroups</div>
                         </div>
                       </div>
+                    </div>
+                    <div className="pt-8">
+                      <div ref={observe} />
+                      <div className="pt-4 border-t border-gray-200 text-sm font-bold">
+                        PM2.5 indexes
+                      </div>
+                      <Chart data={viewportData.pm25} width={width} />
                     </div>
                   </div>
                 ) : null}

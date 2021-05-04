@@ -132,6 +132,7 @@ function MapComponent({ setViewportData }: MapProps, ref: React.Ref<unknown>) {
     setViewportData({
       totalPopulation,
       numberOfBlockgroups: populationCounts.size,
+      pm25,
     });
   }
 
