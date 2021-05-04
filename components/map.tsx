@@ -30,9 +30,13 @@ function pmTooltip(feature: mapboxgl.MapboxGeoJSONFeature) {
 
 type MapProps = {
   setViewportData: (data: ViewportData) => void;
+  filter: [number, number];
 };
 
-function MapComponent({ setViewportData }: MapProps, ref: React.Ref<unknown>) {
+function MapComponent(
+  { setViewportData, filter }: MapProps,
+  ref: React.Ref<unknown>
+) {
   const hoverPopup = useRef<mapboxgl.Popup | null>(null);
   const mapRef = useRef<PMap>(null);
   const mapDivRef = useRef<HTMLDivElement>(null);
@@ -97,11 +101,7 @@ function MapComponent({ setViewportData }: MapProps, ref: React.Ref<unknown>) {
     const map = e.target; //typescript complains about how queryRenderedFeatures called here
     if (map.getZoom() < 9) {
       setViewportData(null);
-      map.setFilter("block-highlights", [
-        "in",
-        ["get", "D_PM25_2"],
-        ["literal", []],
-      ]);
+      map.setFilter("block-highlights", null);
       return;
     }
 
@@ -132,6 +132,7 @@ function MapComponent({ setViewportData }: MapProps, ref: React.Ref<unknown>) {
     setViewportData({
       totalPopulation,
       numberOfBlockgroups: populationCounts.size,
+      pm25,
     });
   }
 
@@ -171,6 +172,16 @@ function MapComponent({ setViewportData }: MapProps, ref: React.Ref<unknown>) {
       mapRef.current = null;
     };
   }, [mapRef, mapDivRef]);
+
+  useEffect(() => {
+    try {
+      mapRef.current.map.setFilter("block-highlights", [
+        "all",
+        [">=", ["to-number", ["get", "D_PM25_2"]], filter[0]],
+        ["<=", ["to-number", ["get", "D_PM25_2"]], filter[1]],
+      ]);
+    } catch (e) {}
+  }, [mapRef, filter]);
 
   return <div ref={mapDivRef} className="flex-auto bg-gray-200"></div>;
 }
