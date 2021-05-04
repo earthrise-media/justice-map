@@ -117,9 +117,11 @@ function MapComponent(
     }
     const totalPopulation = sum(Array.from(populationCounts.values()));
 
-    let pm25 = map.queryRenderedFeatures(undefined, { layers: [targetLayer] });
-    pm25 = pm25
-      .map(function (feature) {
+    let pm25features = map.queryRenderedFeatures(undefined, {
+      layers: [targetLayer],
+    });
+    let pm25 = pm25features
+      .map(function (feature): number {
         return feature.properties["D_PM25_2"];
       })
       .filter(function (val) {
