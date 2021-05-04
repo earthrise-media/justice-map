@@ -84,7 +84,7 @@ function Map(props: MapProps, ref: React.Ref<unknown>) {
   }
 
   function onMoveEnd(e: DragEvent) {
-    const map = e.target;
+    const map = e.target as any; //typescript complains about how queryRenderedFeatures called here
     if (map.getZoom() < 9) {
       document.getElementById('stat').style.display = 'none';
       map.setFilter('block-highlights',
@@ -109,14 +109,14 @@ function Map(props: MapProps, ref: React.Ref<unknown>) {
         popTotal += feature.properties['POP10'];
       }
     });
-    document.getElementById('pop').innerHTML = popTotal;
+    document.getElementById('pop').innerHTML = popTotal.toString();
 
     const pm25Layer = "cali-projected-6z3k79 copy";
     let pm25 = map.queryRenderedFeatures({layers:[pm25Layer]});
     pm25 = pm25.map(function (feature) { return feature.properties['D_PM25_2']})
                .filter(function (val) { return val !== undefined})
                .sort(function(a, b) { return a - b });
-    document.getElementById('blocks').innerHTML = pm25.length;
+    document.getElementById('blocks').innerHTML = pm25.length.toString();
 
     if (pm25.length > 10) {
       pm25 = pm25.slice(pm25.length-10);
