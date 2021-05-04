@@ -5,7 +5,14 @@ import React, {
   useImperativeHandle,
   forwardRef,
 } from "react";
-import PMap, { PMapHandlers, LayerScopedEvent } from "@/lib/pmap";
+import { sum } from "lodash";
+import { ViewportData } from "../types";
+import PMap, {
+  targetLayer,
+  populationLayer,
+  PMapHandlers,
+  LayerScopedEvent,
+} from "@/lib/pmap";
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN!;
 
@@ -14,14 +21,18 @@ type ClickEvent = mapboxgl.MapMouseEvent & mapboxgl.EventData;
 function pmTooltip(feature: mapboxgl.MapboxGeoJSONFeature) {
   const properties = feature.properties;
   return `<div class='flex flex-col items-center w-32'>
-    <div class="text-2xl font-bold text-gray-800">${Math.floor(properties.D_PM25_2).toLocaleString()}</div>
+    <div class="text-2xl font-bold text-gray-800">${Math.floor(
+      properties.D_PM25_2
+    ).toLocaleString()}</div>
     <div class="text-purple-400 text-md font-bold pt-1">PM<sub>2.5</sub> index</div>
   </div>`;
 }
 
-type MapProps = {};
+type MapProps = {
+  setViewportData: (data: ViewportData) => void;
+};
 
-function Map(props: MapProps, ref: React.Ref<unknown>) {
+function MapComponent({ setViewportData }: MapProps, ref: React.Ref<unknown>) {
   const hoverPopup = useRef<mapboxgl.Popup | null>(null);
   const mapRef = useRef<PMap>(null);
   const mapDivRef = useRef<HTMLDivElement>(null);
@@ -78,55 +89,50 @@ function Map(props: MapProps, ref: React.Ref<unknown>) {
     fitBounds,
   }));
 
-  function onClick(e: ClickEvent) {
-    const map = e.target;
+  function onClick(e: mapboxgl.MapboxEvent<MouseEvent>) {
     e.originalEvent.stopPropagation();
   }
 
-  function onMoveEnd(e: DragEvent) {
-    const map = e.target as any; //typescript complains about how queryRenderedFeatures called here
+  function onMoveEnd(e: mapboxgl.MapMouseEvent) {
+    const map = e.target; //typescript complains about how queryRenderedFeatures called here
     if (map.getZoom() < 9) {
-      document.getElementById('stat').style.display = 'none';
-      map.setFilter('block-highlights',
-        ['in',
-         ['get','D_PM25_2'],
-         ['literal',[]]
-       ]
-      );
+      setViewportData(null);
+      map.setFilter("block-highlights", [
+        "in",
+        ["get", "D_PM25_2"],
+        ["literal", []],
+      ]);
       return;
     }
 
-    document.getElementById('stat').style.display = "block";
-
-    const popLayer = "tabblock2010-06-pophu-blockgr-biqw81";
-    const pop = map.queryRenderedFeatures({layers: [popLayer]});
-    let ids = {};
-    let popTotal = 0;
-
-    pop.forEach(function (feature) {
-      if (! (feature.id in ids) && 'POP10' in feature.properties) {
-        ids[feature.id] = true;
-        popTotal += feature.properties['POP10'];
-      }
+    const populationFeatures = map.queryRenderedFeatures(undefined, {
+      layers: [populationLayer],
     });
-    document.getElementById('pop').innerHTML = popTotal.toString();
 
-    const pm25Layer = "cali-projected-6z3k79 copy";
-    let pm25 = map.queryRenderedFeatures({layers:[pm25Layer]});
-    pm25 = pm25.map(function (feature) { return feature.properties['D_PM25_2']})
-               .filter(function (val) { return val !== undefined})
-               .sort(function(a, b) { return a - b });
-    document.getElementById('blocks').innerHTML = pm25.length.toString();
-
-    if (pm25.length > 10) {
-      pm25 = pm25.slice(pm25.length-10);
+    let populationCounts = new Map<number, number>();
+    for (let feature of populationFeatures) {
+      if ("POP10" in feature.properties) {
+        populationCounts.set(feature.id as number, feature.properties.POP10);
+      }
     }
+    const totalPopulation = sum(Array.from(populationCounts.values()));
 
-    map.setFilter('block-highlights',
-      ['in',
-       ['get','D_PM25_2'],
-       ['literal',pm25]
-    ]);
+    let pm25 = map.queryRenderedFeatures(undefined, { layers: [targetLayer] });
+    pm25 = pm25
+      .map(function (feature) {
+        return feature.properties["D_PM25_2"];
+      })
+      .filter(function (val) {
+        return val !== undefined;
+      })
+      .sort(function (a, b) {
+        return a - b;
+      });
+
+    setViewportData({
+      totalPopulation,
+      numberOfBlockgroups: populationCounts.size,
+    });
   }
 
   const mapHandlers = useRef<PMapHandlers>();
@@ -135,7 +141,7 @@ function Map(props: MapProps, ref: React.Ref<unknown>) {
     onClick,
     onMouseMove,
     onMouseLeave,
-    onMoveEnd
+    onMoveEnd,
   };
 
   useEffect(() => {
@@ -169,4 +175,4 @@ function Map(props: MapProps, ref: React.Ref<unknown>) {
   return <div ref={mapDivRef} className="flex-auto bg-gray-200"></div>;
 }
 
-export default forwardRef(Map);
+export default forwardRef(MapComponent);

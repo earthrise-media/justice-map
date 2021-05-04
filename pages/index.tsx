@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Head from "next/head";
 import Map from "@/components/map";
+import { ViewportData } from "../types";
 
 type Indicator = {
   long: string;
@@ -8,7 +9,7 @@ type Indicator = {
   color: string;
 };
 
-const indicators = [
+const indicators: Indicator[] = [
   {
     short: "Pre-1960s Housing",
     long: "% pre-1960 housing (lead paint indicator)",
@@ -70,6 +71,7 @@ function IndicatorSelection({ onClose }: { onClose: () => void }) {
 }
 
 export default function Home() {
+  const [viewportData, setViewportData] = useState<ViewportData>(null);
   const [indicatorsMenu, setIndicatorsMenu] = useState<boolean>(false);
   return (
     <div className="min-h-screen bg-gray-200 flex items-stretch">
@@ -77,7 +79,7 @@ export default function Home() {
         <title>EJScreen</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className="bg-white w-64 md:w-80 ring-1 ring-gray-200 shadow-lg flex-col">
+      <div className="bg-white w-64 md:w-96 ring-1 ring-gray-200 shadow-lg flex-col">
         <div className="p-4 text-md font-bold bg-gray-100 flex items-center justify-between">
           <div className="text-md font-bold">EJSCREEN</div>
           <div className="text-sm font-thin">Climate Justice</div>
@@ -137,20 +139,32 @@ export default function Home() {
                     Source: EPA.gov
                   </a>
                 </div>
-                <div id="stat" style={{'display':'none'}}>
-                  <div className="flex pt-3 items-center text-purple-600">
-                    <div className="font-bold text-3xl">BLK GRP #<span id="blocks"></span></div>
+                {viewportData ? (
+                  <div className="pt-4">
+                    <div className="pt-4 border-t border-gray-200">
+                      <div className="grid grid-cols-2">
+                        <div>
+                          <div className="font-bold text-2xl">
+                            {viewportData.totalPopulation.toLocaleString()}
+                          </div>
+                          <div className="text-sm">Population</div>
+                        </div>
+                        <div>
+                          <div className="font-bold text-2xl">
+                            {viewportData.numberOfBlockgroups.toLocaleString()}
+                          </div>
+                          <div className="text-sm">Blockgroups</div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex pt-3 items-center text-purple-600">
-                    <div className="font-bold text-3xl">POP #<span id="pop"></span></div>
-                  </div>
-                </div>
+                ) : null}
               </>
             )}
           </div>
         </div>
       </div>
-      <Map />
+      <Map setViewportData={setViewportData} />
     </div>
   );
 }
