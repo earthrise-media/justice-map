@@ -16,8 +16,6 @@ import PMap, {
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN!;
 
-type ClickEvent = mapboxgl.MapMouseEvent & mapboxgl.EventData;
-
 function pmTooltip(feature: mapboxgl.MapboxGeoJSONFeature) {
   const properties = feature.properties;
   return `<div class='flex flex-col items-center w-32'>
