@@ -62,6 +62,7 @@ function IndicatorSelection({ onClose }: { onClose: () => void }) {
     <div className="pt-3">
       {indicators.map((indicator) => (
         <button
+          key={indicator.short}
           onClick={() => onClose()}
           className={`text-lg py-1 font-bold block text-${indicator.color}-600`}
         >
