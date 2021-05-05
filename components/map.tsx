@@ -182,7 +182,9 @@ function MapComponent(
         [">=", ["to-number", ["get", "D_PM25_2"]], filter[0]],
         ["<=", ["to-number", ["get", "D_PM25_2"]], filter[1]],
       ]);
-    } catch (e) {}
+    } catch (e) {
+      // pass
+    }
   }, [mapRef, filter]);
 
   return <div ref={mapDivRef} className="flex-auto bg-gray-200"></div>;

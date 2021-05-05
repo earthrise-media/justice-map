@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "export": "next export",
-    "test": "eslint ."
+    "test": "tsc && eslint ."
   },
   "dependencies": {
     "@react-aria/focus": "^3.3.0",
@@ -18,13 +18,9 @@
     "@types/d3": "^6.3.0",
     "@types/geojson": "^7946.0.7",
     "@types/mapbox-gl": "^2.1.2",
-    "@typescript-eslint/eslint-plugin": "^4.22.1",
-    "@typescript-eslint/parser": "^4.22.1",
     "autoprefixer": "^10.2.5",
     "d3": "^6.7.0",
     "d3-axis-for-react": "^1.1.0",
-    "eslint": "^7.25.0",
-    "eslint-plugin-react": "^7.23.2",
     "lodash": "^4.17.21",
     "mapbox-gl": "^2.2.0",
     "next": "10.2.0",
@@ -37,6 +33,10 @@
   },
   "devDependencies": {
     "@types/react": "^17.0.5",
+    "@typescript-eslint/eslint-plugin": "^4.22.1",
+    "@typescript-eslint/parser": "^4.22.1",
+    "eslint": "^7.25.0",
+    "eslint-plugin-react": "^7.23.2",
     "typescript": "^4.2.4"
   }
 }
