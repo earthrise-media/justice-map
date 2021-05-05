@@ -95,14 +95,8 @@ function MapComponent(
     e.originalEvent.stopPropagation();
   }
 
-  function onMoveEnd(e: mapboxgl.MapMouseEvent) {
-    const map = e.target; //typescript complains about how queryRenderedFeatures called here
-    if (map.getZoom() < 9) {
-      setViewportData(null);
-      map.setFilter("block-highlights", null);
-      return;
-    }
-
+  function countMapFeatures(map: mapboxgl.Map) {
+    if (map.getZoom() < 9) return;
     const populationFeatures = map.queryRenderedFeatures(undefined, {
       layers: [populationLayer],
     });
@@ -134,6 +128,16 @@ function MapComponent(
       numberOfBlockgroups: populationCounts.size,
       pm25,
     });
+  }
+
+  function onMoveEnd(e: mapboxgl.MapMouseEvent) {
+    const map = e.target; //typescript complains about how queryRenderedFeatures called here
+    if (map.getZoom() < 9) {
+      setViewportData(null);
+      map.setFilter("block-highlights", null);
+      return;
+    }
+    map.on("idle", () => countMapFeatures(map));
   }
 
   const mapHandlers = useRef<PMapHandlers>();
