@@ -68,7 +68,7 @@ export default function Chart({
   const margin = { top: 10, left: 10, bottom: 20, right: 10 };
 
   const bins = useMemo(() => d3.bin().thresholds(30)(data), [data]);
-  const domain = [-15000, 15000];
+  const domain = [-20000, 65000];
 
   const xScale = d3
     .scaleLinear()
