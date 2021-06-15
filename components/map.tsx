@@ -31,7 +31,7 @@ function pmTooltip(feature: mapboxgl.MapboxGeoJSONFeature) {
 type MapProps = {
   setViewportData: (data: ViewportData) => void;
   filter: [number, number];
-  layer: String;
+  layer: string;
 };
 
 function MapComponent(
@@ -41,7 +41,7 @@ function MapComponent(
   const hoverPopup = useRef<mapboxgl.Popup | null>(null);
   const mapRef = useRef<PMap>(null);
   const mapDivRef = useRef<HTMLDivElement>(null);
-  let layerRef = useRef<String>(null);
+  let layerRef = useRef<string>(null);
 
   function fitBounds(coord: [number, number, number, number]) {
     mapRef.current.map.fitBounds(coord, {
@@ -150,7 +150,7 @@ function MapComponent(
     onClick,
     onMouseMove,
     onMouseLeave,
-    onMoveEnd
+    onMoveEnd,
   };
 
   useEffect(() => {
@@ -194,76 +194,131 @@ function MapComponent(
   }, [mapRef, filter, layer]);
 
   useEffect(() => {
-    if (layer == layerRef) return;
-    if (! mapRef.current.map.isStyleLoaded()) return;
+    if (layer == layerRef.current) return;
+    if (!mapRef.current.map.isStyleLoaded()) return;
 
-    layerRef = layer;
+    layerRef.current = layer;
 
-    if (mapRef.current.map.getSource('highzoom')) {
-      mapRef.current.map.removeLayer('highzoom-layer')
-      mapRef.current.map.removeSource('highzoom');
+    if (mapRef.current.map.getSource("highzoom")) {
+      mapRef.current.map.removeLayer("highzoom-layer");
+      mapRef.current.map.removeSource("highzoom");
     }
-    if (mapRef.current.map.getSource('lowzoom')) {
-      mapRef.current.map.removeLayer('lowzoom-layer')
-      mapRef.current.map.removeSource('lowzoom');
+    if (mapRef.current.map.getSource("lowzoom")) {
+      mapRef.current.map.removeLayer("lowzoom-layer");
+      mapRef.current.map.removeSource("lowzoom");
     }
 
-    if (! (layer in layers)) return;
+    if (!(layer in layers)) return;
 
-    let layer_config = layers[layer]['highzoom'];
+    let layer_config = layers[layer]["highzoom"];
 
-    mapRef.current.map.addSource('highzoom', {
-      type: 'vector',
-      url: layer_config['source'],
+    mapRef.current.map.addSource("highzoom", {
+      type: "vector",
+      url: layer_config["source"],
       minzoom: 9,
-      maxzoom: 22
+      maxzoom: 22,
     });
-    mapRef.current.map.addLayer({
-      id: 'highzoom-layer',
-      type: 'fill',
-      source: 'highzoom',
-      'source-layer': layer_config['source_layer'],
-      paint: {
-        'fill-color': ["interpolate", ["linear"], ["zoom"],
-          9, ["interpolate", ["linear"], ["get", layer_config['field']],
-           layer_config['minramp'], "hsla(" + layer_config['mincolor'] + ", 0)",
-           layer_config['maxramp'], "hsla(" + layer_config['maxcolor'] + ", 0)" ],
-          11, ["interpolate", ["linear"], ["get", layer_config['field']],
-            layer_config['minramp'], "hsla(" + layer_config['mincolor'] + ", 0.5)",
-            layer_config['maxramp'], "hsla(" + layer_config['maxcolor'] + ", 0.5)" ],
-          22, ["interpolate", ["linear"], ["get", layer_config['field']],
-            layer_config['minramp'], "hsla(" + layer_config['mincolor'] + ", 0.5)",
-            layer_config['maxramp'],  "hsla(" + layer_config['maxcolor'] + ", 0.5)" ] ]
-      }
-    }, 'block-highlights');
+    mapRef.current.map.addLayer(
+      {
+        id: "highzoom-layer",
+        type: "fill",
+        source: "highzoom",
+        "source-layer": layer_config["source_layer"],
+        paint: {
+          "fill-color": [
+            "interpolate",
+            ["linear"],
+            ["zoom"],
+            9,
+            [
+              "interpolate",
+              ["linear"],
+              ["get", layer_config["field"]],
+              layer_config["minramp"],
+              "hsla(" + layer_config["mincolor"] + ", 0)",
+              layer_config["maxramp"],
+              "hsla(" + layer_config["maxcolor"] + ", 0)",
+            ],
+            11,
+            [
+              "interpolate",
+              ["linear"],
+              ["get", layer_config["field"]],
+              layer_config["minramp"],
+              "hsla(" + layer_config["mincolor"] + ", 0.5)",
+              layer_config["maxramp"],
+              "hsla(" + layer_config["maxcolor"] + ", 0.5)",
+            ],
+            22,
+            [
+              "interpolate",
+              ["linear"],
+              ["get", layer_config["field"]],
+              layer_config["minramp"],
+              "hsla(" + layer_config["mincolor"] + ", 0.5)",
+              layer_config["maxramp"],
+              "hsla(" + layer_config["maxcolor"] + ", 0.5)",
+            ],
+          ],
+        },
+      },
+      "block-highlights"
+    );
 
-  layer_config = layers[layer]['lowzoom'];
+    layer_config = layers[layer]["lowzoom"];
 
-   mapRef.current.map.addSource('lowzoom', {
-     type: 'vector',
-     url: layer_config['source'],
-     minzoom: 0,
-     maxzoom: 11
-   });
-   mapRef.current.map.addLayer({
-     id: 'lowzoom-layer',
-     type: 'fill',
-     source: 'lowzoom',
-     'source-layer': layer_config['source_layer'],
-     paint: {
-       'fill-color': ["interpolate", ["linear"], ["zoom"],
-         0, ["interpolate", ["linear"], ["get", layer_config['field']],
-          layer_config['minramp'], "hsla(" + layer_config['mincolor'] + ", 0.5)",
-          layer_config['maxramp'], "hsla(" + layer_config['maxcolor'] + ", 0.5)" ],
-         9, ["interpolate", ["linear"], ["get", layer_config['field']],
-           layer_config['minramp'], "hsla(" + layer_config['mincolor'] + ", 0.5)",
-           layer_config['maxramp'], "hsla(" + layer_config['maxcolor'] + ", 0.5)" ],
-         11, ["interpolate", ["linear"], ["get", layer_config['field']],
-           layer_config['minramp'], "hsla(" + layer_config['mincolor'] + ", 0)",
-           layer_config['maxramp'],  "hsla(" + layer_config['maxcolor'] + ", 0)" ] ]
-     }
-   }, 'block-highlights');
-
+    mapRef.current.map.addSource("lowzoom", {
+      type: "vector",
+      url: layer_config["source"],
+      minzoom: 0,
+      maxzoom: 11,
+    });
+    mapRef.current.map.addLayer(
+      {
+        id: "lowzoom-layer",
+        type: "fill",
+        source: "lowzoom",
+        "source-layer": layer_config["source_layer"],
+        paint: {
+          "fill-color": [
+            "interpolate",
+            ["linear"],
+            ["zoom"],
+            0,
+            [
+              "interpolate",
+              ["linear"],
+              ["get", layer_config["field"]],
+              layer_config["minramp"],
+              "hsla(" + layer_config["mincolor"] + ", 0.5)",
+              layer_config["maxramp"],
+              "hsla(" + layer_config["maxcolor"] + ", 0.5)",
+            ],
+            9,
+            [
+              "interpolate",
+              ["linear"],
+              ["get", layer_config["field"]],
+              layer_config["minramp"],
+              "hsla(" + layer_config["mincolor"] + ", 0.5)",
+              layer_config["maxramp"],
+              "hsla(" + layer_config["maxcolor"] + ", 0.5)",
+            ],
+            11,
+            [
+              "interpolate",
+              ["linear"],
+              ["get", layer_config["field"]],
+              layer_config["minramp"],
+              "hsla(" + layer_config["mincolor"] + ", 0)",
+              layer_config["maxramp"],
+              "hsla(" + layer_config["maxcolor"] + ", 0)",
+            ],
+          ],
+        },
+      },
+      "block-highlights"
+    );
   }, [mapRef, layer]);
 
   return <div ref={mapDivRef} className="flex-auto bg-gray-200"></div>;
