@@ -9,75 +9,65 @@ type Indicator = {
   long: string;
   short: string;
   color: string;
+  layer: string;
 };
 
 const indicators: Indicator[] = [
-  {
-    short: "Pre-1960s Housing",
-    long: "% pre-1960 housing (lead paint indicator)",
-    color: "yellow",
-  },
-  {
-    short: "Diesel particulate matter",
-    long: "Diesel particulate matter level in air",
-    color: "red",
-  },
-  {
-    short: "Air toxics cancer risk",
-    long: "Air toxics cancer risk",
-    color: "purple",
-  },
+//  {
+//    short: "Pre-1960s Housing",
+//    long: "% pre-1960 housing (lead paint indicator)",
+//    color: "yellow",
+//  },
+//  {
+//    short: "Diesel particulate matter",
+//    long: "Diesel particulate matter level in air",
+//    color: "red",
+//  },
+//  {
+//    short: "Air toxics cancer risk",
+//    long: "Air toxics cancer risk",
+//    color: "purple",
+//  },
   {
     short: "Respiratory hazard",
     long: "Air toxics respiratory hazard index",
     color: "purple",
+    layer: "resp"
   },
-  { short: "Traffic", long: "Traffic proximity and volume", color: "blue" },
-  {
-    short: "Water pollution",
-    long: "Indicator for major direct dischargers to water",
-    color: "blue",
-  },
-  {
-    short: "National Priorities List",
-    long: "Proximity to National Priorities List (NPL) sites",
-    color: "yellow",
-  },
-  {
-    short: "Risk Management Plan",
-    long: "Proximity to Risk Management Plan (RMP) facilities",
-    color: "yellow",
-  },
-  {
-    short: "Treatment Storage and Disposal",
-    long: "Proximity to Treatment Storage and Disposal (TSDF) facilities",
-    color: "pink",
-  },
-  { short: "Ozone", long: "Ozone level in air", color: "blue" },
-  { short: "PM2.5", long: "PM2.5 level in air", color: "blue" },
+//  { short: "Traffic", long: "Traffic proximity and volume", color: "blue" },
+//  {
+//    short: "Water pollution",
+//    long: "Indicator for major direct dischargers to water",
+//    color: "blue",
+//  },
+//  {
+//    short: "National Priorities List",
+//    long: "Proximity to National Priorities List (NPL) sites",
+//    color: "yellow",
+//  },
+//  {
+//    short: "Risk Management Plan",
+//    long: "Proximity to Risk Management Plan (RMP) facilities",
+//    color: "yellow",
+//  },
+//  {
+//    short: "Treatment Storage and Disposal",
+//    long: "Proximity to Treatment Storage and Disposal (TSDF) facilities",
+//    color: "pink",
+//  },
+//  { short: "Ozone", long: "Ozone level in air", color: "blue", layer: 'ozone' },
+  { short: "PM2.5", long: "PM2.5 level in air", color: "blue", layer: 'pm2.5' },
 ];
-
-function IndicatorSelection({ onClose }: { onClose: () => void }) {
-  return (
-    <div className="pt-3">
-      {indicators.map((indicator) => (
-        <button
-          key={indicator.short}
-          onClick={() => onClose()}
-          className={`text-lg py-1 font-bold block text-${indicator.color}-600`}
-        >
-          {indicator.short}
-        </button>
-      ))}
-    </div>
-  );
-}
 
 export default function Home() {
   const [viewportData, setViewportData] = useState<ViewportData>(null);
   const [filter, setFilter] = useState<[number, number]>([-1500, 1500]);
   const [indicatorsMenu, setIndicatorsMenu] = useState<boolean>(false);
   const { observe, width } = useDimensions();
+  const [indicator, setIndicator] = useState<String>('PM2.5');
+  const [color, setColor] = useState<String>('blue');
+  const [layer, setLayer] = useState<String>('pm2.5');
+
   return (
     <div className="min-h-screen bg-gray-200 flex items-stretch">
       <Head>
@@ -112,11 +102,26 @@ export default function Home() {
               </svg>
             </button>
             {indicatorsMenu ? (
-              <IndicatorSelection onClose={() => setIndicatorsMenu(false)} />
+              <div className="pt-3">
+                {indicators.map((indicator) => (
+                  <button
+                    key={indicator.short}
+                    onClick={() => {
+                      setIndicator(indicator.short);
+                      setColor(indicator.color);
+                      setLayer(indicator.layer);
+                      setIndicatorsMenu(false)
+                    }}
+                    className={`text-lg py-1 font-bold block text-${indicator.color}-600`}
+                  >
+                    {indicator.short}
+                  </button>
+                ))}
+              </div>
             ) : (
               <>
-                <div className="flex pt-3 items-center text-purple-600">
-                  <div className="font-bold text-4xl">PM2.5</div>
+                <div className={"flex pt-3 items-center text-" + color + "-600"}>
+                  <div className="font-bold text-4xl">{indicator}</div>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="ml-2 h-8 w-8"
@@ -180,7 +185,7 @@ export default function Home() {
           </div>
         </div>
       </div>
-      <Map filter={filter} setViewportData={setViewportData} />
+      <Map filter={filter} setViewportData={setViewportData} layer={layer} />
     </div>
   );
 }
