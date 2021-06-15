@@ -13,50 +13,18 @@ type Indicator = {
 };
 
 const indicators: Indicator[] = [
-  //  {
-  //    short: "Pre-1960s Housing",
-  //    long: "% pre-1960 housing (lead paint indicator)",
-  //    color: "yellow",
-  //  },
-  //  {
-  //    short: "Diesel particulate matter",
-  //    long: "Diesel particulate matter level in air",
-  //    color: "red",
-  //  },
-  //  {
-  //    short: "Air toxics cancer risk",
-  //    long: "Air toxics cancer risk",
-  //    color: "purple",
-  //  },
+  {
+    short: "PM2.5",
+    long: "PM2.5 level in air",
+    color: "text-blue-600",
+    layer: "pm2.5",
+  },
   {
     short: "Respiratory hazard",
     long: "Air toxics respiratory hazard index",
-    color: "purple",
+    color: "text-purple-600",
     layer: "resp",
   },
-  //  { short: "Traffic", long: "Traffic proximity and volume", color: "blue" },
-  //  {
-  //    short: "Water pollution",
-  //    long: "Indicator for major direct dischargers to water",
-  //    color: "blue",
-  //  },
-  //  {
-  //    short: "National Priorities List",
-  //    long: "Proximity to National Priorities List (NPL) sites",
-  //    color: "yellow",
-  //  },
-  //  {
-  //    short: "Risk Management Plan",
-  //    long: "Proximity to Risk Management Plan (RMP) facilities",
-  //    color: "yellow",
-  //  },
-  //  {
-  //    short: "Treatment Storage and Disposal",
-  //    long: "Proximity to Treatment Storage and Disposal (TSDF) facilities",
-  //    color: "pink",
-  //  },
-  //  { short: "Ozone", long: "Ozone level in air", color: "blue", layer: 'ozone' },
-  { short: "PM2.5", long: "PM2.5 level in air", color: "blue", layer: "pm2.5" },
 ];
 
 export default function Home() {
@@ -64,9 +32,7 @@ export default function Home() {
   const [filter, setFilter] = useState<[number, number]>([-1500, 1500]);
   const [indicatorsMenu, setIndicatorsMenu] = useState<boolean>(false);
   const { observe, width } = useDimensions();
-  const [indicator, setIndicator] = useState<string>("PM2.5");
-  const [color, setColor] = useState<string>("blue");
-  const [layer, setLayer] = useState<string>("pm2.5");
+  const [indicator, setIndicator] = useState<Indicator>(indicators[0]);
 
   return (
     <div className="min-h-screen bg-gray-200 flex items-stretch">
@@ -107,12 +73,10 @@ export default function Home() {
                   <button
                     key={indicator.short}
                     onClick={() => {
-                      setIndicator(indicator.short);
-                      setColor(indicator.color);
-                      setLayer(indicator.layer);
+                      setIndicator(indicator);
                       setIndicatorsMenu(false);
                     }}
-                    className={`text-lg py-1 font-bold block text-${indicator.color}-600`}
+                    className={`text-lg py-1 font-bold block ${indicator.color}`}
                   >
                     {indicator.short}
                   </button>
@@ -120,10 +84,8 @@ export default function Home() {
               </div>
             ) : (
               <>
-                <div
-                  className={"flex pt-3 items-center text-" + color + "-600"}
-                >
-                  <div className="text-4xl font-bold">{indicator}</div>
+                <div className={"flex pt-3 items-center " + indicator.color}>
+                  <div className="text-4xl font-bold">{indicator.short}</div>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="w-8 h-8 ml-2"
@@ -187,7 +149,11 @@ export default function Home() {
           </div>
         </div>
       </div>
-      <Map filter={filter} setViewportData={setViewportData} layer={layer} />
+      <Map
+        filter={filter}
+        setViewportData={setViewportData}
+        layer={indicator.layer}
+      />
     </div>
   );
 }
