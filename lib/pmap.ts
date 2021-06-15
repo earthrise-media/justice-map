@@ -10,56 +10,108 @@ const dissolveLayer = "ejscreen-2020-ca-d-pm25-2-dissolve copy";
 export const populationLayer = "tabblock2010-06-pophu-blockgr-biqw81";
 export const targetLayer = "cali-projected-6z3k79 copy";
 
-export const layers = {
-  "pm2.5": {
-    highzoom: {
-      source: "mapbox://mikelmaron.7euwrrvj",
-      source_layer: "cali-projected-6z3k79",
+function makePaint({
+  field,
+  minramp,
+  maxramp,
+  high,
+}: {
+  field: string;
+  minramp: number;
+  maxramp: number;
+  high: boolean;
+}): mapboxgl.FillPaint {
+  const mincolor = "232, 88%, 100%";
+  const maxcolor = "0, 98%, 56%";
+  return {
+    "fill-color": [
+      "interpolate",
+      ["linear"],
+      ["zoom"],
+      high ? 9 : 0,
+      [
+        "interpolate",
+        ["linear"],
+        ["get", field],
+        minramp,
+        `hsla(${mincolor}, 0)`,
+        maxramp,
+        `hsla(${maxcolor}, 0)`,
+      ],
+      high ? 11 : 9,
+      [
+        "interpolate",
+        ["linear"],
+        ["get", field],
+        minramp,
+        `hsla(${mincolor}, 0.5)`,
+        maxramp,
+        `hsla(${maxcolor}, 0.5)`,
+      ],
+      high ? 22 : 11,
+      [
+        "interpolate",
+        ["linear"],
+        ["get", field],
+        minramp,
+        `hsla(${mincolor}, 0.5)`,
+        maxramp,
+        `hsla(${maxcolor}, 0.5)`,
+      ],
+    ],
+  };
+}
+
+export const layers: mapboxgl.FillLayer[] = [
+  {
+    id: "pm2.5-high",
+    source: "mapbox://mikelmaron.7euwrrvj",
+    "source-layer": "cali-projected-6z3k79",
+    type: "fill",
+    paint: makePaint({
       field: "D_PM25_2",
-      minval: -20000,
       minramp: -3228,
-      maxval: 65000,
       maxramp: 12512,
-      mincolor: "232, 88%, 100%",
-      maxcolor: "0, 98%, 56%",
-    },
-    lowzoom: {
-      source: "mapbox://mikelmaron.baqnetv7",
-      source_layer: "EJSCREEN_2020_CA_D_PM25_2_dissolve",
+      high: true,
+    }),
+  },
+  {
+    id: "pm2.5-low",
+    source: "mapbox://mikelmaron.baqnetv7",
+    "source-layer": "EJSCREEN_2020_CA_D_PM25_2_dissolve",
+    type: "fill",
+    paint: makePaint({
       field: "D_PM25_2",
-      minval: -20000,
       minramp: -3228,
-      maxval: 65000,
       maxramp: 12512,
-      mincolor: "232, 88%, 100%",
-      maxcolor: "0, 98%, 56%",
-    },
+      high: false,
+    }),
   },
-  resp: {
-    highzoom: {
-      source: "mapbox://mikelmaron.1lin9onj",
-      source_layer: "D_RESP_2geojson",
+  {
+    id: "resp-high",
+    source: "mapbox://mikelmaron.1lin9onj",
+    "source-layer": "D_RESP_2geojson",
+    type: "fill",
+    paint: makePaint({
       field: "D_RESP_2",
-      minval: -20000,
       minramp: -1036,
-      maxval: 65000,
       maxramp: 3152,
-      mincolor: "232, 88%, 100%",
-      maxcolor: "0, 98%, 56%",
-    },
-    lowzoom: {
-      source: "mapbox://mikelmaron.0xhwv3w2",
-      source_layer: "D_RESP_2_bucketgeojson",
-      field: "D_RESP_2",
-      minval: -20000,
-      minramp: -1036,
-      maxval: 65000,
-      maxramp: 3152,
-      mincolor: "232, 88%, 100%",
-      maxcolor: "0, 98%, 56%",
-    },
+      high: true,
+    }),
   },
-};
+  {
+    id: "resp-low",
+    source: "mapbox://mikelmaron.0xhwv3w2",
+    "source-layer": "D_RESP_2_bucketgeojson",
+    type: "fill",
+    paint: makePaint({
+      field: "D_RESP_2",
+      minramp: -1036,
+      maxramp: 3152,
+      high: false,
+    }),
+  },
+];
 
 const accessToken =
   "pk.eyJ1IjoibWlrZWxtYXJvbiIsImEiOiJjaWZlY25lZGQ2cTJjc2trbmdiZDdjYjllIn0.Wx1n0X7aeCQyDTnK6_mrGw";
@@ -73,6 +125,34 @@ async function loadAndAugmentStyle(styleId: string) {
     accessToken;
 
   const style = (await (await fetch(url)).json()) as mapboxgl.Style;
+
+  for (let layer of layers) {
+    const url = layer["source"] as string;
+    style.sources[url] = {
+      type: "vector",
+      url,
+      ...(layer.id.endsWith("high")
+        ? {
+            minzoom: 9,
+            maxzoom: 22,
+          }
+        : {
+            minzoom: 0,
+            maxzoom: 11,
+          }),
+    };
+  }
+
+  const highlightsIdx = style.layers.findIndex(
+    (layer) => layer.id === "block-highlights"
+  );
+
+  for (let layer of layers) {
+    layer.layout = {
+      visibility: layer.id.startsWith("pm") ? "visible" : "none",
+    };
+    style.layers.splice(highlightsIdx, 0, layer);
+  }
 
   return style;
 }
