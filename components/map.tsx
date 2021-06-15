@@ -8,8 +8,10 @@ import React, {
 import { sum } from "lodash";
 import { ViewportData } from "../types";
 import PMap, {
+  defaultStyle,
   targetLayer,
   populationLayer,
+  layers,
   PMapHandlers,
   LayerScopedEvent,
 } from "@/lib/pmap";
@@ -29,10 +31,11 @@ function pmTooltip(feature: mapboxgl.MapboxGeoJSONFeature) {
 type MapProps = {
   setViewportData: (data: ViewportData) => void;
   filter: [number, number];
+  layer: string;
 };
 
 function MapComponent(
-  { setViewportData, filter }: MapProps,
+  { setViewportData, filter, layer }: MapProps,
   ref: React.Ref<unknown>
 ) {
   const hoverPopup = useRef<mapboxgl.Popup | null>(null);
@@ -155,7 +158,7 @@ function MapComponent(
     mapRef.current = new PMap(
       {
         container: mapDivRef.current,
-        style: "mapbox://styles/mikelmaron/ckmxwzmzq19pp17pr9j778ik8",
+        style: defaultStyle,
         boxZoom: false,
         bounds: [
           -127.17773437499999,
@@ -187,7 +190,22 @@ function MapComponent(
     } catch (e) {
       // pass
     }
-  }, [mapRef, filter]);
+  }, [mapRef, filter, layer]);
+
+  useEffect(() => {
+    try {
+      for (let l of layers) {
+        mapRef.current.map.setLayoutProperty(
+          l.id,
+          "visibility",
+          l.id.startsWith(layer) ? "visible" : "none"
+        );
+      }
+    } catch (e) {
+      // Doing this sort of update with GL JS is pretty
+      // awful, just ignore the error here.
+    }
+  }, [mapRef, layer]);
 
   return <div ref={mapDivRef} className="flex-auto bg-gray-200"></div>;
 }
