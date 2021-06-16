@@ -93,7 +93,7 @@ export default function Chart({
     },
   });
 
-  let { trackProps } = useSlider(
+  let { groupProps, trackProps } = useSlider(
     {
       "aria-label": "Range",
     },
@@ -108,6 +108,7 @@ export default function Chart({
         height: `${height}px`,
       }}
       className="relative"
+      {...groupProps}
     >
       <svg
         className="absolute top-0 left-0"
