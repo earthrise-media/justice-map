@@ -61,7 +61,7 @@ function makePaint({
     ],
   };
 }
-type FillLayerDetails = mapboxgl.FillLayer & {field: string, label: string}
+type FillLayerDetails = mapboxgl.FillLayer & { field: string; label: string };
 
 export const layers: FillLayerDetails[] = [
   {
@@ -197,8 +197,8 @@ export default class PMap {
     map.on("click", this.onClick);
 
     for (let layer of layers) {
-      map.on("mousemove", layer['id'], this.onMouseMove);
-      map.on("mouseleave", layer['id'], this.onMouseLeave);
+      map.on("mousemove", layer["id"], this.onMouseMove);
+      map.on("mouseleave", layer["id"], this.onMouseLeave);
     }
     map.on("moveend", this.onMoveEnd);
 

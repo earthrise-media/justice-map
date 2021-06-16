@@ -44,7 +44,6 @@ export default function Home() {
   const [viewportData, setViewportData] = useState<ViewportData>(null);
   const [filter, setFilter] = useState<[number, number]>([-1500, 1500]);
   const [indicatorsMenu, setIndicatorsMenu] = useState<boolean>(false);
-  const { observe, width } = useDimensions();
   const [indicator, setIndicator] = useState<Indicator>(indicators[0]);
 
   return (
@@ -134,13 +133,12 @@ export default function Home() {
                       </div>
                     </div>
                     <div className="pt-8">
-                      <div ref={observe} />
                       <div className="pt-4 pb-4 text-sm font-bold border-t border-gray-200">
                         {indicator.long}
                       </div>
                       <Chart
                         data={viewportData.indicator}
-                        width={width}
+                        width={300}
                         setFilter={setFilter}
                       />
                     </div>
