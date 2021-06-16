@@ -93,7 +93,7 @@ export default function Chart({
     },
   });
 
-  let { groupProps, trackProps, labelProps, outputProps } = useSlider(
+  let { trackProps } = useSlider(
     {
       "aria-label": "Range",
     },
@@ -194,17 +194,6 @@ export default function Chart({
           />
         </div>
       </div>
-      <VisuallyHidden>
-        <div style={{ display: "flex", alignSelf: "stretch" }}>
-          <label {...labelProps}>Range</label>
-          <output
-            {...outputProps}
-            style={{ flex: "1 0 auto", textAlign: "end" }}
-          >
-            {`${state.getThumbValueLabel(0)} - ${state.getThumbValueLabel(1)}`}
-          </output>
-        </div>
-      </VisuallyHidden>
     </div>
   );
 }

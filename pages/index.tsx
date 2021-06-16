@@ -3,10 +3,9 @@ import Head from "next/head";
 import Map from "@/components/map";
 import Chart from "@/components/chart";
 import { ViewportData } from "../types";
-import useDimensions from "react-cool-dimensions";
 
 type Indicator = {
-  long: string;
+  long: React.ReactNode;
   short: string;
   color: string;
   layer: string;
