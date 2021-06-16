@@ -127,7 +127,7 @@ export default function Home() {
                         PM2.5 indexes
                       </div>
                       <Chart
-                        data={viewportData.pm25}
+                        data={viewportData.indicator}
                         width={width}
                         setFilter={setFilter}
                       />

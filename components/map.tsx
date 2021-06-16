@@ -18,7 +18,7 @@ import PMap, {
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN!;
 
-function pmTooltip(val: float, label: string) {
+function pmTooltip(val: number, label: string) {
   return `<div class='flex flex-col items-center w-32'>
     <div class="text-2xl font-bold text-gray-800">${Math.floor(
       val
@@ -53,8 +53,8 @@ function MapComponent(
     if (e.features.length == 0) return;
     const feature = e.features[0];
 
-    const layer = layers.filter(layer => layer.id == feature.layer.id);
-    if (feature.properties[layer[0].field] !== undefined) {
+    const layerConfig = layers.filter(l => l.id == feature.layer.id)[0];
+    if (feature.properties[layerConfig.field] !== undefined) {
       map.getCanvas().style.cursor = "pointer";
 
       if (!hoverPopup.current) {
@@ -65,7 +65,7 @@ function MapComponent(
         });
       }
 
-      const content = pmTooltip(feature.properties[layer[0].field], layer[0].label);
+      const content = pmTooltip(feature.properties[layerConfig.field], layerConfig.label);
 
       hoverPopup.current.setLngLat(e.lngLat).setHTML(content).addTo(map);
     } else {
@@ -112,12 +112,16 @@ function MapComponent(
     }
     const totalPopulation = sum(Array.from(populationCounts.values()));
 
-    let pm25features = map.queryRenderedFeatures(undefined, {
-      layers: [targetLayer],
+    const layerConfig = layers.filter(l =>
+      l.id.endsWith("-high") && map.getLayoutProperty(l.id, "visibility") == "visible"
+    )[0];
+
+    let indicatorFeatures = map.queryRenderedFeatures(undefined, {
+      layers: [layerConfig['id']],
     });
-    let pm25 = pm25features
+    let indicator = indicatorFeatures
       .map(function (feature): number {
-        return feature.properties["D_PM25_2"];
+        return feature.properties[ layerConfig['field'] ];
       })
       .filter(function (val) {
         return val !== undefined;
@@ -129,7 +133,7 @@ function MapComponent(
     setViewportData({
       totalPopulation,
       numberOfBlockgroups: populationCounts.size,
-      pm25,
+      indicator,
     });
   }
 
@@ -182,10 +186,14 @@ function MapComponent(
 
   useEffect(() => {
     try {
+      const layerConfig = layers.filter(l =>
+        l.id.endsWith("-high") && mapRef.current.map.getLayoutProperty(l.id, "visibility") == "visible"
+      )[0];
+
       mapRef.current.map.setFilter("block-highlights", [
         "all",
-        [">=", ["to-number", ["get", "D_PM25_2"]], filter[0]],
-        ["<=", ["to-number", ["get", "D_PM25_2"]], filter[1]],
+        [">=", ["to-number", ["get", layerConfig['field']]], filter[0]],
+        ["<=", ["to-number", ["get", layerConfig['field']]], filter[1]],
       ]);
     } catch (e) {
       // pass
