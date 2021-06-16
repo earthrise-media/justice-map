@@ -15,7 +15,7 @@ type Indicator = {
 const indicators: Indicator[] = [
   {
     short: "PM2.5",
-    long: "PM2.5 level in air",
+    long: "PM<sub>2.5</sub> describes fine inhalable particles, with diameters that are generally 2.5 micrometers and smaller. Under the Clean Air Act, EPA sets and reviews national air quality standards for PM. / <a class='text-blue-500 underline' href='https://www.epa.gov/air-trends/particulate-matter-pm25-trends'> Source: EPA.gov</a>",
     color: "text-blue-600",
     layer: "pm2.5",
   },
@@ -101,17 +101,7 @@ export default function Home() {
                     />
                   </svg>
                 </div>
-                <div className="pt-3 text-md">
-                  PM<sub>2.5</sub> describes fine inhalable particles, with
-                  diameters that are generally 2.5 micrometers and smaller.
-                  Under the Clean Air Act, EPA sets and reviews national air
-                  quality standards for PM.{" / "}
-                  <a
-                    className="text-blue-500 underline"
-                    href="https://www.epa.gov/air-trends/particulate-matter-pm25-trends"
-                  >
-                    Source: EPA.gov
-                  </a>
+                <div className="pt-3 text-md" dangerouslySetInnerHTML={{__html: indicator.long}} >
                 </div>
                 {viewportData ? (
                   <div className="pt-4">

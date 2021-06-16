@@ -18,13 +18,12 @@ import PMap, {
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN!;
 
-function pmTooltip(feature: mapboxgl.MapboxGeoJSONFeature) {
-  const properties = feature.properties;
+function pmTooltip(val: float, label: string) {
   return `<div class='flex flex-col items-center w-32'>
     <div class="text-2xl font-bold text-gray-800">${Math.floor(
-      properties.D_PM25_2
+      val
     ).toLocaleString()}</div>
-    <div class="text-purple-400 text-md font-bold pt-1">PM<sub>2.5</sub> index</div>
+    <div class="text-purple-400 text-md font-bold pt-1">${label}</div>
   </div>`;
 }
 
@@ -54,7 +53,8 @@ function MapComponent(
     if (e.features.length == 0) return;
     const feature = e.features[0];
 
-    if (feature.properties.D_PM25_2 !== undefined) {
+    const layer = layers.filter(layer => layer.id == feature.layer.id);
+    if (feature.properties[layer[0].field] !== undefined) {
       map.getCanvas().style.cursor = "pointer";
 
       if (!hoverPopup.current) {
@@ -65,7 +65,7 @@ function MapComponent(
         });
       }
 
-      const content = pmTooltip(feature);
+      const content = pmTooltip(feature.properties[layer[0].field], layer[0].label);
 
       hoverPopup.current.setLngLat(e.lngLat).setHTML(content).addTo(map);
     } else {

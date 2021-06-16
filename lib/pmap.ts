@@ -68,6 +68,8 @@ export const layers: mapboxgl.FillLayer[] = [
     source: "mapbox://mikelmaron.7euwrrvj",
     "source-layer": "cali-projected-6z3k79",
     type: "fill",
+    field: "D_PM25_2",
+    label: "PM<sub>2.5</sub> index",
     paint: makePaint({
       field: "D_PM25_2",
       minramp: -3228,
@@ -80,6 +82,8 @@ export const layers: mapboxgl.FillLayer[] = [
     source: "mapbox://mikelmaron.baqnetv7",
     "source-layer": "EJSCREEN_2020_CA_D_PM25_2_dissolve",
     type: "fill",
+    field: "D_PM25_2",
+    label: "PM<sub>2.5</sub> index",
     paint: makePaint({
       field: "D_PM25_2",
       minramp: -3228,
@@ -92,6 +96,8 @@ export const layers: mapboxgl.FillLayer[] = [
     source: "mapbox://mikelmaron.1lin9onj",
     "source-layer": "D_RESP_2geojson",
     type: "fill",
+    field: "D_RESP_2",
+    label: "Respiratory Hazard index",
     paint: makePaint({
       field: "D_RESP_2",
       minramp: -1036,
@@ -104,6 +110,8 @@ export const layers: mapboxgl.FillLayer[] = [
     source: "mapbox://mikelmaron.0xhwv3w2",
     "source-layer": "D_RESP_2_bucketgeojson",
     type: "fill",
+    field: "D_RESP_2",
+    label: "Respiratory Hazard index",
     paint: makePaint({
       field: "D_RESP_2",
       minramp: -1036,
@@ -186,10 +194,11 @@ export default class PMap {
 
     map.getCanvas().style.cursor = "default";
     map.on("click", this.onClick);
-    map.on("mousemove", dissolveLayer, this.onMouseMove);
-    map.on("mouseleave", dissolveLayer, this.onMouseLeave);
-    map.on("mousemove", targetLayer, this.onMouseMove);
-    map.on("mouseleave", targetLayer, this.onMouseLeave);
+
+    for (let layer of layers) {
+      map.on("mousemove", layer['id'], this.onMouseMove);
+      map.on("mouseleave", layer['id'], this.onMouseLeave);
+    }
     map.on("moveend", this.onMoveEnd);
 
     map.addControl(
