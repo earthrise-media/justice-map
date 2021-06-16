@@ -9,7 +9,6 @@ import { sum } from "lodash";
 import { ViewportData } from "../types";
 import PMap, {
   defaultStyle,
-  targetLayer,
   populationLayer,
   layers,
   PMapHandlers,
@@ -53,7 +52,7 @@ function MapComponent(
     if (e.features.length == 0) return;
     const feature = e.features[0];
 
-    const layerConfig = layers.filter(l => l.id == feature.layer.id)[0];
+    const layerConfig = layers.filter((l) => l.id == feature.layer.id)[0];
     if (feature.properties[layerConfig.field] !== undefined) {
       map.getCanvas().style.cursor = "pointer";
 
@@ -65,7 +64,10 @@ function MapComponent(
         });
       }
 
-      const content = pmTooltip(feature.properties[layerConfig.field], layerConfig.label);
+      const content = pmTooltip(
+        feature.properties[layerConfig.field],
+        layerConfig.label
+      );
 
       hoverPopup.current.setLngLat(e.lngLat).setHTML(content).addTo(map);
     } else {
@@ -112,16 +114,18 @@ function MapComponent(
     }
     const totalPopulation = sum(Array.from(populationCounts.values()));
 
-    const layerConfig = layers.filter(l =>
-      l.id.endsWith("-high") && map.getLayoutProperty(l.id, "visibility") == "visible"
+    const layerConfig = layers.filter(
+      (l) =>
+        l.id.endsWith("-high") &&
+        map.getLayoutProperty(l.id, "visibility") == "visible"
     )[0];
 
     let indicatorFeatures = map.queryRenderedFeatures(undefined, {
-      layers: [layerConfig['id']],
+      layers: [layerConfig["id"]],
     });
     let indicator = indicatorFeatures
       .map(function (feature): number {
-        return feature.properties[ layerConfig['field'] ];
+        return feature.properties[layerConfig["field"]];
       })
       .filter(function (val) {
         return val !== undefined;
@@ -186,14 +190,16 @@ function MapComponent(
 
   useEffect(() => {
     try {
-      const layerConfig = layers.filter(l =>
-        l.id.endsWith("-high") && mapRef.current.map.getLayoutProperty(l.id, "visibility") == "visible"
+      const layerConfig = layers.filter(
+        (l) =>
+          l.id.endsWith("-high") &&
+          mapRef.current.map.getLayoutProperty(l.id, "visibility") == "visible"
       )[0];
 
       mapRef.current.map.setFilter("block-highlights", [
         "all",
-        [">=", ["to-number", ["get", layerConfig['field']]], filter[0]],
-        ["<=", ["to-number", ["get", layerConfig['field']]], filter[1]],
+        [">=", ["to-number", ["get", layerConfig["field"]]], filter[0]],
+        ["<=", ["to-number", ["get", layerConfig["field"]]], filter[1]],
       ]);
     } catch (e) {
       // pass
