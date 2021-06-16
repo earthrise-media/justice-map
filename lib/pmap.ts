@@ -61,8 +61,9 @@ function makePaint({
     ],
   };
 }
+type FillLayerDetails = mapboxgl.FillLayer & {field: string, label: string}
 
-export const layers: mapboxgl.FillLayer[] = [
+export const layers: FillLayerDetails[] = [
   {
     id: "pm2.5-high",
     source: "mapbox://mikelmaron.7euwrrvj",
