@@ -10,7 +10,8 @@ import { ViewportData } from "../types";
 import PMap, {
   defaultStyle,
   populationLayer,
-  layers,
+  highlightLayers,
+  fillLayers,
   PMapHandlers,
   LayerScopedEvent,
 } from "@/lib/pmap";
@@ -52,7 +53,7 @@ function MapComponent(
     if (e.features.length == 0) return;
     const feature = e.features[0];
 
-    const layerConfig = layers.filter((l) => l.id == feature.layer.id)[0];
+    const layerConfig = fillLayers.filter((l) => l.id == feature.layer.id)[0];
     if (feature.properties[layerConfig.field] !== undefined) {
       map.getCanvas().style.cursor = "pointer";
 
@@ -114,7 +115,7 @@ function MapComponent(
     }
     const totalPopulation = sum(Array.from(populationCounts.values()));
 
-    const layerConfig = layers.filter(
+    const layerConfig = fillLayers.filter(
       (l) =>
         l.id.endsWith("-high") &&
         map.getLayoutProperty(l.id, "visibility") == "visible"
@@ -147,7 +148,7 @@ function MapComponent(
     const map = e.target; //typescript complains about how queryRenderedFeatures called here
     if (map.getZoom() < 9) {
       setViewportData(null);
-      const layerConfig = layers.filter(
+      const layerConfig = highlightLayers.filter(
         (l) =>
           l.id.endsWith("-highlights") &&
           mapRef.current.map.getLayoutProperty(l.id, "visibility") == "visible"
@@ -198,7 +199,7 @@ function MapComponent(
   useEffect(() => {
     if (mapRef.current.map.getZoom() < 9) return;
     try {
-      const layerConfig = layers.filter(
+      const layerConfig = highlightLayers.filter(
         (l) =>
           l.id.endsWith("-highlights") &&
           mapRef.current.map.getLayoutProperty(l.id, "visibility") == "visible"
@@ -216,7 +217,14 @@ function MapComponent(
 
   useEffect(() => {
     try {
-      for (let l of layers) {
+      for (let l of fillLayers) {
+        mapRef.current.map.setLayoutProperty(
+          l.id,
+          "visibility",
+          l.id.startsWith(layer) ? "visible" : "none"
+        );
+      }
+      for (let l of highlightLayers) {
         mapRef.current.map.setLayoutProperty(
           l.id,
           "visibility",

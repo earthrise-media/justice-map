@@ -60,22 +60,9 @@ function makePaint({
   };
 }
 type FillLayerDetails = mapboxgl.FillLayer & { field: string; label: string; minchart: number; maxchart: number };
+type LineLayerDetails = mapboxgl.LineLayer & { field: string; label: string; minchart: number; maxchart: number };
 
-export const layers = [
-  {
-    id: "pm2.5-highlights",
-    source: "mapbox://mikelmaron.7euwrrvj",
-    "source-layer": "cali-projected-6z3k79",
-    type: "line",
-    field: "D_PM25_2",
-    label: "PM<sub>2.5</sub> index",
-    minchart: -18064,
-    maxchart: 61374,
-    paint: {
-      "line-width": 1,
-      "line-color": "#000000"
-    }
-  },
+export const fillLayers: FillLayerDetails[] = [
   {
     id: "pm2.5-low",
     source: "mapbox://mikelmaron.baqnetv7",
@@ -83,6 +70,8 @@ export const layers = [
     type: "fill",
     field: "D_PM25_2",
     label: "PM<sub>2.5</sub> index",
+    minchart: -18064,
+    maxchart: 61374,
     paint: makePaint({
       field: "D_PM25_2",
       minramp: 0,
@@ -107,26 +96,14 @@ export const layers = [
     }),
   },
   {
-    id: "resp-highlights",
-    source: "mapbox://mikelmaron.1lin9onj",
-    "source-layer": "D_RESP_2geojson",
-    type: "line",
-    field: "D_RESP_2",
-    label: "Respiratory Hazard index",
-    minchart: -1036,
-    maxchart: 3152,
-    paint: {
-      "line-width": 1,
-      "line-color": "#000000"
-    }
-  },
-  {
     id: "resp-low",
     source: "mapbox://mikelmaron.0xhwv3w2",
     "source-layer": "D_RESP_2_bucketgeojson",
     type: "fill",
     field: "D_RESP_2",
     label: "Respiratory Hazard index",
+    minchart: -1036,
+    maxchart: 3152,
     paint: makePaint({
       field: "D_RESP_2",
       minramp: 0,
@@ -151,26 +128,14 @@ export const layers = [
     }),
   },
   {
-    id: "ozone-highlights",
-    source: "mapbox://mikelmaron.dctdmrue",
-    "source-layer": "D_OZONE_2geojson",
-    type: "line",
-    field: "D_OZONE_2",
-    label: "Ozone index",
-    minchart: -95200,
-    maxchart: 282000,
-    paint: {
-      "line-width": 1,
-      "line-color": "#000000"
-    }
-  },
-  {
     id: "ozone-low",
     source: "mapbox://mikelmaron.84z3vp5j",
     "source-layer": "D_OZONE_2_bucketgeojson",
     type: "fill",
     field: "D_OZONE_2",
     label: "Ozone index",
+    minchart: -95200,
+    maxchart: 282000,
     paint: makePaint({
       field: "D_OZONE_2",
       minramp: 0,
@@ -195,26 +160,14 @@ export const layers = [
     }),
   },
   {
-    id: "floodfactor-highlights",
-    source: "mapbox://mikelmaron.06ifzhs7",
-    "source-layer": "flood_factorgeojson",
-    type: "line",
-    field: "avg_risk_score_all",
-    label: "FloodFactor Risk Score",
-    minchart: 1,
-    maxchart: 10,
-    paint: {
-      "line-width": 1,
-      "line-color": "#000000"
-    }
-  },
-  {
     id: "floodfactor-low",
     source: "mapbox://mikelmaron.528get74",
     "source-layer": "flood_factor_bucketgeojson",
     type: "fill",
     field: "avg_risk_score_all",
     label: "FloodFactor Risk Score",
+    minchart: 1,
+    maxchart: 10,
     paint: makePaint({
       field: "avg_risk_score_all",
       minramp: 1,
@@ -240,6 +193,65 @@ export const layers = [
   }
 ];
 
+export const highlightLayers: LineLayerDetails[] = [
+  {
+    id: "pm2.5-highlights",
+    source: "mapbox://mikelmaron.7euwrrvj",
+    "source-layer": "cali-projected-6z3k79",
+    type: "line",
+    field: "D_PM25_2",
+    label: "PM<sub>2.5</sub> index",
+    minchart: -18064,
+    maxchart: 61374,
+    paint: {
+      "line-width": 1,
+      "line-color": "#000000"
+    }
+  },
+  {
+    id: "resp-highlights",
+    source: "mapbox://mikelmaron.1lin9onj",
+    "source-layer": "D_RESP_2geojson",
+    type: "line",
+    field: "D_RESP_2",
+    label: "Respiratory Hazard index",
+    minchart: -1036,
+    maxchart: 3152,
+    paint: {
+      "line-width": 1,
+      "line-color": "#000000"
+    }
+  },
+  {
+    id: "ozone-highlights",
+    source: "mapbox://mikelmaron.dctdmrue",
+    "source-layer": "D_OZONE_2geojson",
+    type: "line",
+    field: "D_OZONE_2",
+    label: "Ozone index",
+    minchart: -95200,
+    maxchart: 282000,
+    paint: {
+      "line-width": 1,
+      "line-color": "#000000"
+    }
+  },
+  {
+    id: "floodfactor-highlights",
+    source: "mapbox://mikelmaron.06ifzhs7",
+    "source-layer": "flood_factorgeojson",
+    type: "line",
+    field: "avg_risk_score_all",
+    label: "FloodFactor Risk Score",
+    minchart: 1,
+    maxchart: 10,
+    paint: {
+      "line-width": 1,
+      "line-color": "#000000"
+    }
+  }
+];
+
 const accessToken =
   "pk.eyJ1IjoibWlrZWxtYXJvbiIsImEiOiJjaWZlY25lZGQ2cTJjc2trbmdiZDdjYjllIn0.Wx1n0X7aeCQyDTnK6_mrGw";
 
@@ -253,7 +265,24 @@ async function loadAndAugmentStyle(styleId: string) {
 
   const style = (await (await fetch(url)).json()) as mapboxgl.Style;
 
-  for (let layer of layers) {
+  for (let layer of fillLayers) {
+    const url = layer["source"] as string;
+    style.sources[url] = {
+      type: "vector",
+      url,
+      ...(layer.id.endsWith("low")
+        ? {
+            minzoom: 0,
+            maxzoom: 11,
+          }
+        : {
+            minzoom: 9,
+            maxzoom: 22,
+          }),
+    };
+  }
+
+  for (let layer of highlightLayers) {
     const url = layer["source"] as string;
     style.sources[url] = {
       type: "vector",
@@ -274,7 +303,14 @@ async function loadAndAugmentStyle(styleId: string) {
     (layer) => layer.id === populationLayer
   );
 
-  for (let layer of layers) {
+  for (let layer of highlightLayers) {
+    layer.layout = {
+      visibility: layer.id.startsWith("pm") ? "visible" : "none",
+    };
+    style.layers.splice(popIdx, 0, layer);
+  }
+
+  for (let layer of fillLayers) {
     layer.layout = {
       visibility: layer.id.startsWith("pm") ? "visible" : "none",
     };
@@ -314,7 +350,7 @@ export default class PMap {
     map.getCanvas().style.cursor = "default";
     map.on("click", this.onClick);
 
-    for (let layer of layers) {
+    for (let layer of fillLayers) {
       map.on("mousemove", layer["id"], this.onMouseMove);
       map.on("mouseleave", layer["id"], this.onMouseLeave);
     }
