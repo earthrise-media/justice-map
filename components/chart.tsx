@@ -62,6 +62,7 @@ export default function Chart({
   data: Data;
   width: number;
   setFilter: (arg0: [number, number]) => void;
+  extent: [number, number];
 }) {
   let trackRef = useRef(null);
 

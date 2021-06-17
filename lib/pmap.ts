@@ -19,16 +19,9 @@ function makePaint({
   minramp: number;
   maxramp: number;
   high: boolean;
-  highlight: boolean;
 }): mapboxgl.FillPaint {
   const mincolor = "232, 88%, 100%";
   const maxcolor = "0, 98%, 56%";
-  if (highlight) {
-    return {
-      "line-width": 1,
-      "line-color": "#000000"
-    };
-  }
   return {
     "fill-color": [
       "interpolate",
@@ -79,13 +72,10 @@ export const layers: FillLayerDetails[] = [
     label: "PM<sub>2.5</sub> index",
     minchart: -18064,
     maxchart: 61374,
-    paint: makePaint({
-      field: "D_PM25_2",
-      minramp: 0,
-      maxramp: 12512,
-      high: false,
-      highlight: true
-    }),
+    paint: {
+      "line-width": 1,
+      "line-color": "#000000"
+    }
   },
   {
     id: "pm2.5-low",
@@ -126,13 +116,10 @@ export const layers: FillLayerDetails[] = [
     label: "Respiratory Hazard index",
     minchart: -1036,
     maxchart: 3152,
-    paint: makePaint({
-      field: "D_RESP_2",
-      minramp: 0,
-      maxramp: 1000,
-      high: false,
-      highlight: true
-    }),
+    paint: {
+      "line-width": 1,
+      "line-color": "#000000"
+    }
   },
   {
     id: "resp-low",
@@ -173,13 +160,10 @@ export const layers: FillLayerDetails[] = [
     label: "Ozone index",
     minchart: -95200,
     maxchart: 282000,
-    paint: makePaint({
-      field: "D_OZONE_2",
-      minramp: 0,
-      maxramp: 50000,
-      high: false,
-      highlight: true
-    }),
+    paint: {
+      "line-width": 1,
+      "line-color": "#000000"
+    }
   },
   {
     id: "ozone-low",
@@ -220,13 +204,10 @@ export const layers: FillLayerDetails[] = [
     label: "FloodFactor Risk Score",
     minchart: 1,
     maxchart: 10,
-    paint: makePaint({
-      field: "avg_risk_score_all",
-      minramp: 1,
-      maxramp: 10,
-      high: false,
-      highlight: true
-    }),
+    paint: {
+      "line-width": 1,
+      "line-color": "#000000"
+    }
   },
   {
     id: "floodfactor-low",
