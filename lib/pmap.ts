@@ -59,9 +59,9 @@ function makePaint({
     ],
   };
 }
-type FillLayerDetails = mapboxgl.FillLayer & mapboxgl.LineLayer & { field: string; label: string; minchart: number; maxchart: number };
+type FillLayerDetails = mapboxgl.FillLayer & { field: string; label: string; minchart: number; maxchart: number };
 
-export const layers: FillLayerDetails[] = [
+export const layers = [
   {
     id: "pm2.5-highlights",
     source: "mapbox://mikelmaron.7euwrrvj",
