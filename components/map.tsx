@@ -134,10 +134,12 @@ function MapComponent(
         return a - b;
       });
 
+    let extent = [layerConfig["minchart"], layerConfig["maxchart"]];
     setViewportData({
       totalPopulation,
       numberOfBlockgroups: populationCounts.size,
       indicator,
+      extent
     });
   }
 
@@ -145,7 +147,12 @@ function MapComponent(
     const map = e.target; //typescript complains about how queryRenderedFeatures called here
     if (map.getZoom() < 9) {
       setViewportData(null);
-      map.setFilter("block-highlights", null);
+      const layerConfig = layers.filter(
+        (l) =>
+          l.id.endsWith("-highlights") &&
+          mapRef.current.map.getLayoutProperty(l.id, "visibility") == "visible"
+      )[0];
+      map.setFilter(layerConfig["id"], null);
       return;
     }
     map.on("idle", () => countMapFeatures(map));
@@ -189,14 +196,15 @@ function MapComponent(
   }, [mapRef, mapDivRef]);
 
   useEffect(() => {
+    if (mapRef.current.map.getZoom() < 9) return;
     try {
       const layerConfig = layers.filter(
         (l) =>
-          l.id.endsWith("-high") &&
+          l.id.endsWith("-highlights") &&
           mapRef.current.map.getLayoutProperty(l.id, "visibility") == "visible"
       )[0];
 
-      mapRef.current.map.setFilter("block-highlights", [
+      mapRef.current.map.setFilter(layerConfig["id"], [
         "all",
         [">=", ["to-number", ["get", layerConfig["field"]]], filter[0]],
         ["<=", ["to-number", ["get", layerConfig["field"]]], filter[1]],

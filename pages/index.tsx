@@ -37,6 +37,18 @@ const indicators: Indicator[] = [
     color: "text-purple-600",
     layer: "resp",
   },
+  {
+    short: "Ozone",
+    long: "Ozone level in air",
+    color: "text-green-600",
+    layer: "ozone",
+  },
+  {
+    short: "FloodFactor",
+    long: "FloodFactor",
+    color: "text-yellow-600",
+    layer: "floodfactor",
+  },
 ];
 
 export default function Home() {
@@ -132,13 +144,11 @@ export default function Home() {
                       </div>
                     </div>
                     <div className="pt-8">
-                      <div className="pt-4 pb-4 text-sm font-bold border-t border-gray-200">
-                        {indicator.long}
-                      </div>
                       <Chart
                         data={viewportData.indicator}
                         width={300}
                         setFilter={setFilter}
+                        extent={viewportData.extent}
                       />
                     </div>
                   </div>

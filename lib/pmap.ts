@@ -6,23 +6,29 @@ export const defaultStyle =
 
 type ClickEvent = mapboxgl.MapMouseEvent & mapboxgl.EventData;
 
-const dissolveLayer = "ejscreen-2020-ca-d-pm25-2-dissolve copy";
 export const populationLayer = "tabblock2010-06-pophu-blockgr-biqw81";
-export const targetLayer = "cali-projected-6z3k79 copy";
 
 function makePaint({
   field,
   minramp,
   maxramp,
   high,
+  highlight
 }: {
   field: string;
   minramp: number;
   maxramp: number;
   high: boolean;
+  highlight: boolean;
 }): mapboxgl.FillPaint {
   const mincolor = "232, 88%, 100%";
   const maxcolor = "0, 98%, 56%";
+  if (highlight) {
+    return {
+      "line-width": 1,
+      "line-color": "#000000"
+    };
+  }
   return {
     "fill-color": [
       "interpolate",
@@ -34,9 +40,9 @@ function makePaint({
         ["linear"],
         ["get", field],
         minramp,
-        `hsla(${mincolor}, 0)`,
+        `hsla(${mincolor}, ${high ? 0 : 0.5 })`,
         maxramp,
-        `hsla(${maxcolor}, 0)`,
+        `hsla(${maxcolor}, ${high ? 0 : 0.5 })`,
       ],
       high ? 11 : 9,
       [
@@ -44,9 +50,9 @@ function makePaint({
         ["linear"],
         ["get", field],
         minramp,
-        `hsla(${mincolor}, 0.5)`,
+        `hsla(${mincolor}, ${high ? 0.5 : 0.5 })`,
         maxramp,
-        `hsla(${maxcolor}, 0.5)`,
+        `hsla(${maxcolor}, ${high ? 0.5 : 0.5 })`,
       ],
       high ? 22 : 11,
       [
@@ -54,28 +60,31 @@ function makePaint({
         ["linear"],
         ["get", field],
         minramp,
-        `hsla(${mincolor}, 0.5)`,
+        `hsla(${mincolor}, ${high ? 0.5 : 0 })`,
         maxramp,
-        `hsla(${maxcolor}, 0.5)`,
+        `hsla(${maxcolor}, ${high ? 0.5 : 0 })`,
       ],
     ],
   };
 }
-type FillLayerDetails = mapboxgl.FillLayer & { field: string; label: string };
+type FillLayerDetails = mapboxgl.FillLayer & { field: string; label: string; minchart: number; maxchart: number };
 
 export const layers: FillLayerDetails[] = [
   {
-    id: "pm2.5-high",
+    id: "pm2.5-highlights",
     source: "mapbox://mikelmaron.7euwrrvj",
     "source-layer": "cali-projected-6z3k79",
-    type: "fill",
+    type: "line",
     field: "D_PM25_2",
     label: "PM<sub>2.5</sub> index",
+    minchart: -18064,
+    maxchart: 61374,
     paint: makePaint({
       field: "D_PM25_2",
-      minramp: -3228,
+      minramp: 0,
       maxramp: 12512,
-      high: true,
+      high: false,
+      highlight: true
     }),
   },
   {
@@ -87,23 +96,42 @@ export const layers: FillLayerDetails[] = [
     label: "PM<sub>2.5</sub> index",
     paint: makePaint({
       field: "D_PM25_2",
-      minramp: -3228,
+      minramp: 0,
       maxramp: 12512,
-      high: false,
+      high: false
     }),
   },
   {
-    id: "resp-high",
+    id: "pm2.5-high",
+    source: "mapbox://mikelmaron.7euwrrvj",
+    "source-layer": "cali-projected-6z3k79",
+    type: "fill",
+    field: "D_PM25_2",
+    label: "PM<sub>2.5</sub> index",
+    minchart: -18064,
+    maxchart: 61374,
+    paint: makePaint({
+      field: "D_PM25_2",
+      minramp: 0,
+      maxramp: 12512,
+      high: true
+    }),
+  },
+  {
+    id: "resp-highlights",
     source: "mapbox://mikelmaron.1lin9onj",
     "source-layer": "D_RESP_2geojson",
-    type: "fill",
+    type: "line",
     field: "D_RESP_2",
     label: "Respiratory Hazard index",
+    minchart: -1036,
+    maxchart: 3152,
     paint: makePaint({
       field: "D_RESP_2",
-      minramp: -1036,
-      maxramp: 3152,
-      high: true,
+      minramp: 0,
+      maxramp: 1000,
+      high: false,
+      highlight: true
     }),
   },
   {
@@ -115,11 +143,121 @@ export const layers: FillLayerDetails[] = [
     label: "Respiratory Hazard index",
     paint: makePaint({
       field: "D_RESP_2",
-      minramp: -1036,
-      maxramp: 3152,
-      high: false,
+      minramp: 0,
+      maxramp: 1000,
+      high: false
     }),
   },
+  {
+    id: "resp-high",
+    source: "mapbox://mikelmaron.1lin9onj",
+    "source-layer": "D_RESP_2geojson",
+    type: "fill",
+    field: "D_RESP_2",
+    label: "Respiratory Hazard index",
+    minchart: -1036,
+    maxchart: 3152,
+    paint: makePaint({
+      field: "D_RESP_2",
+      minramp: 0,
+      maxramp: 1000,
+      high: true
+    }),
+  },
+  {
+    id: "ozone-highlights",
+    source: "mapbox://mikelmaron.dctdmrue",
+    "source-layer": "D_OZONE_2geojson",
+    type: "line",
+    field: "D_OZONE_2",
+    label: "Ozone index",
+    minchart: -95200,
+    maxchart: 282000,
+    paint: makePaint({
+      field: "D_OZONE_2",
+      minramp: 0,
+      maxramp: 50000,
+      high: false,
+      highlight: true
+    }),
+  },
+  {
+    id: "ozone-low",
+    source: "mapbox://mikelmaron.84z3vp5j",
+    "source-layer": "D_OZONE_2_bucketgeojson",
+    type: "fill",
+    field: "D_OZONE_2",
+    label: "Ozone index",
+    paint: makePaint({
+      field: "D_OZONE_2",
+      minramp: 0,
+      maxramp: 50000,
+      high: false
+    }),
+  },
+  {
+    id: "ozone-high",
+    source: "mapbox://mikelmaron.dctdmrue",
+    "source-layer": "D_OZONE_2geojson",
+    type: "fill",
+    field: "D_OZONE_2",
+    label: "Ozone index",
+    minchart: -95200,
+    maxchart: 282000,
+    paint: makePaint({
+      field: "D_OZONE_2",
+      minramp: 0,
+      maxramp: 50000,
+      high: true
+    }),
+  },
+  {
+    id: "floodfactor-highlights",
+    source: "mapbox://mikelmaron.06ifzhs7",
+    "source-layer": "flood_factorgeojson",
+    type: "line",
+    field: "avg_risk_score_all",
+    label: "FloodFactor Risk Score",
+    minchart: 1,
+    maxchart: 10,
+    paint: makePaint({
+      field: "avg_risk_score_all",
+      minramp: 1,
+      maxramp: 10,
+      high: false,
+      highlight: true
+    }),
+  },
+  {
+    id: "floodfactor-low",
+    source: "mapbox://mikelmaron.528get74",
+    "source-layer": "flood_factor_bucketgeojson",
+    type: "fill",
+    field: "avg_risk_score_all",
+    label: "FloodFactor Risk Score",
+    paint: makePaint({
+      field: "avg_risk_score_all",
+      minramp: 1,
+      maxramp: 10,
+      high: false
+    }),
+  },
+  {
+    id: "floodfactor-high",
+    source: "mapbox://mikelmaron.06ifzhs7",
+    "source-layer": "flood_factorgeojson",
+    type: "fill",
+    field: "avg_risk_score_all",
+    label: "FloodFactor Risk Score",
+    minchart: 1,
+    maxchart: 10,
+    paint: makePaint({
+      field: "avg_risk_score_all",
+      minramp: 1,
+      maxramp: 10,
+      high: true
+    }),
+  }
 ];
 
 const accessToken =
@@ -140,27 +278,27 @@ async function loadAndAugmentStyle(styleId: string) {
     style.sources[url] = {
       type: "vector",
       url,
-      ...(layer.id.endsWith("high")
+      ...(layer.id.endsWith("low")
         ? {
-            minzoom: 9,
-            maxzoom: 22,
-          }
-        : {
             minzoom: 0,
             maxzoom: 11,
+          }
+        : {
+            minzoom: 9,
+            maxzoom: 22,
           }),
     };
   }
 
-  const highlightsIdx = style.layers.findIndex(
-    (layer) => layer.id === "block-highlights"
+  const popIdx = style.layers.findIndex(
+    (layer) => layer.id === populationLayer
   );
 
   for (let layer of layers) {
     layer.layout = {
       visibility: layer.id.startsWith("pm") ? "visible" : "none",
     };
-    style.layers.splice(highlightsIdx, 0, layer);
+    style.layers.splice(popIdx, 0, layer);
   }
 
   return style;
