@@ -12,8 +12,7 @@ function makePaint({
   field,
   minramp,
   maxramp,
-  high,
-  highlight
+  high
 }: {
   field: string;
   minramp: number;
@@ -60,7 +59,7 @@ function makePaint({
     ],
   };
 }
-type FillLayerDetails = mapboxgl.FillLayer & { field: string; label: string; minchart: number; maxchart: number };
+type FillLayerDetails = mapboxgl.FillLayer & mapboxgl.LineLayer & { field: string; label: string; minchart: number; maxchart: number };
 
 export const layers: FillLayerDetails[] = [
   {
