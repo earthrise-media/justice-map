@@ -60,13 +60,13 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gray-200 flex items-stretch">
       <Head>
-        <title>EJScreen</title>
+        <title>Justice 40 explorations by Earthrise</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className="flex-col w-64 bg-white shadow-lg md:w-96 ring-1 ring-gray-200">
         <div className="flex items-center justify-between p-4 font-bold bg-gray-100 text-md">
-          <div className="font-bold text-md">EJSCREEN</div>
-          <div className="text-sm font-thin">Climate Justice</div>
+          <div className="font-bold text-md">Justice 40 explorations</div>
+          <div className="text-sm font-thin p-3">an open collaboration to experiment with data and technology organized by <a href="https://earthrise.media/">Earthrise</a></div>
         </div>
         <div className="flex-auto overflow-y-auto">
           <div className="px-5 pt-5">
