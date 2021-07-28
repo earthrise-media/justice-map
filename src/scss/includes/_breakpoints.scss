@@ -1,0 +1,30 @@
+/*------------------------------------*\
+    #RESPONSIVE BREAKPOINTS
+\*------------------------------------*/
+
+@mixin breakpoint($point) {
+
+    @if $point == phone {
+        @media (max-width: $size-tablet - 1px) { @content; }
+    } @else if $point == iphone5 {
+        @media (max-width: $size-min) { @content; }
+    } @else if $point == not-phone {
+        @media (min-width: $size-tablet) { @content; }
+    } @else if $point == tablet {
+        @media (min-width: $size-tablet) and (max-width: $size-desktop - 1px) { @content; }
+    } @else if $point == desktop {
+        @media (min-width: $size-desktop) { @content; }
+    } @else if $point == hd {
+        @media (min-width: $size-hd) { @content; }
+    } @else if $point == not-desktop {
+        @media (max-width: $size-desktop - 1px) { @content; }
+    } @else if $point == not-hd {
+        @media (max-width: $size-hd - 1px) { @content; }
+    } @else if $point == laptop {
+        @media (min-width: $size-desktop) and (max-height: $size-laptop-height) { @content; }
+    } @else if $point == landscape {
+        @media (orientation: landscape) { @content; }
+    } @else if $point == retina {
+        @media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min-resolution: 192dpi), only screen and (min-width: $size-desktop){ @content; }
+    }
+}

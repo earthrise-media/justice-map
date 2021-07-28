@@ -1,0 +1,199 @@
+/*------------------------------------*\
+    #BASE
+\*------------------------------------*/
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+:root {
+    --app-height: 100vh;
+}
+
+html {
+    // -webkit-overflow-scrolling: touch;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    position: relative;
+
+}
+
+body {
+    background: $color-bg;
+    line-height: 150%;
+    text-align: left;
+}
+
+body,
+html {
+    min-height: 100%;
+    height: 100%;
+}
+
+.content {
+    @include flex;
+    position: relative;
+    overflow: hidden;
+    width: 100vw;
+    height: var(--app-height);
+    min-height: 600px;
+}
+
+body,
+input,
+textarea,
+button,
+select,
+code,
+pre,
+svg text {
+    @include font-family("text");
+    font-weight: 300;
+    font-size: inherit;
+    color: $color-text;
+    -webkit-font-smoothing: antialiased;
+}
+
+input,
+textarea,
+button,
+select,
+svg text {
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-appearance: none;
+    -webkit-font-smoothing: antialiased;
+    background: none;
+    border-radius: 0;
+    border: none;
+    color: inherit;
+    margin: 0;
+    padding: 0;
+}
+
+button,
+select,
+label {
+    cursor: pointer;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+    -webkit-tap-highlight-color: $color-transparent;
+    transition: color $time-fast $easing;
+
+    span {
+        position: relative;
+
+        &::after {
+            content: "";
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: currentColor;
+            transform: scaleX(0);
+            transform-origin: 100% 50%;
+            transition: transform 0.25s ease-out 0.1s;
+        }
+    }
+
+    &:hover {
+        span::after {
+            transform: scaleX(1);
+            transform-origin: 0% 50%;
+        }
+    }
+}
+
+b,
+strong {
+    font-weight: bold;
+}
+
+i,
+em {
+    font-style: italic;
+}
+
+svg {
+    vertical-align: middle;
+}
+
+mark {
+    background-color: transparent;
+}
+
+hr {
+    display: block;
+    border: none;
+    border-bottom: 1px solid $color-line;
+    background: none;
+    margin: 0;
+}
+
+sup {
+    vertical-align: super;
+    font-size: 70%;
+}
+
+*:focus {
+    outline: none;
+}
+
+::selection {
+    background: $color-select-bg;
+    color: $color-select-text;
+    text-shadow: none;
+}
+
+
+h1 {
+    @include font-family("title", 400);
+}
+
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: 400;
+}
+
+textarea {
+    resize: none;
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+// screen reader text
+.sr-only,
+.screen-reader-text {
+    @extend %visually-hidden;
+}
+
+.visually-hidden,
+%visually-hidden {
+    position: absolute;
+    overflow: hidden;
+    height: 1px;
+    width: 1px;
+    margin: -1px;
+    padding: 0;
+    border: none;
+    clip: rect(0 0 0 0);
+}
+
+[data-scroll="fade"],
+.js-end {
+    opacity: 0;
+}
+
+.mapboxgl-control-container { display: none; }
+

@@ -1,0 +1,112 @@
+/*------------------------------------*\
+    #MIXINS
+\*------------------------------------*/
+
+@mixin full($position: absolute, $offset: 0) {
+    position: $position;
+    bottom: strip-units($offset) + px;
+    left: strip-units($offset) + px;
+    right: strip-units($offset) + px;
+    top: strip-units($offset) + px;
+}
+
+
+@function vw($size, $bp: desktop, $max: true) {
+    $layouts: (
+        desktop: 1280,
+        tablet: 768,
+        phone: 375
+    );
+
+    @if map-has-key($layouts, $bp) {
+        @return strip-units($size) / map-get($layouts, $bp) * 100vw;
+    } @else {
+        @warn "Unfortunately, no value could be retrieved from `#{$bp}`.";
+    }
+}
+
+
+@function vh($size, $bp: desktop) {
+    $layouts: (
+        desktop: 800,
+        tablet: 1024,
+        phone: 667
+    );
+
+    @if map-has-key($layouts, $bp) {
+        @return strip-units($size) / map-get($layouts, $bp) * 100vh;
+    } @else {
+        @warn "Unfortunately, no value could be retrieved from `#{$bp}`.";
+    }
+}
+
+
+@function z($list, $element) {
+    $z-index: index($list, $element);
+    @if $z-index {
+        @return $z-index;
+    }
+    @warn 'There is no item "#{$element}" in this list; choose one of: #{$list}';
+    @return null;
+}
+
+
+@mixin z-index($element, $list:$elements) {
+    z-index: z($list, $element);
+}
+
+
+@mixin placeholder {
+    &::-webkit-input-placeholder { @content; }
+    &:-moz-placeholder { @content; } /* Firefox 18- */
+    &::-moz-placeholder { @content; } /* Firefox 19+ */
+    &:-ms-input-placeholder { @content; } /* IE */
+}
+
+
+@function strip-units($value) {
+    @return $value / ($value * 0 + 1);
+}
+
+$browser-context: 16px;
+$line-height: 1.4;
+
+@mixin font-size($size: $browser-context, $line: $line-height) {
+    font-size: strip-units($size) + px;
+    font-size: (strip-units($size) / strip-units($browser-context)) + rem;
+    @if (strip-units($line) < 4) {
+        line-height: strip-units($line);
+    } @else {
+        line-height: (strip-units($line) / strip-units($size));
+    }
+}
+
+
+@mixin hover {
+    .mod_no-touchevents &:hover,
+    // .touchevents &:active,
+    .accessibility &:focus {
+        @content;
+    }
+}
+
+@mixin accessibility {
+    .accessibility &:focus {
+        @content;
+    }
+}
+
+
+@mixin v-center {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+
+@mixin flex($direction: row, $justify: space-between, $align: center) {
+    display: flex;
+    flex-direction: $direction;
+    justify-content: $justify;
+    align-items: $align;
+}

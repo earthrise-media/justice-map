@@ -1,0 +1,36 @@
+@import "includes/variables/colors";
+@import "includes/variables/fonts";
+@import "includes/variables/grid";
+@import "includes/variables/sizes";
+@import "includes/variables/transitions";
+@import "includes/variables/zindex";
+
+@import "includes/mixins";
+@import "includes/breakpoints";
+@import "includes/mediaqueries";
+@import "includes/reset";
+@import "includes/fonts";
+@import "includes/base";
+
+@import "includes/plugins/mapbox-gl";
+@import "includes/plugins/nouislider";
+
+@import "includes/icons/svg-icons";
+
+@import "includes/modules/footer";
+@import "includes/modules/menu";
+@import "includes/modules/map";
+@import "includes/modules/info";
+@import "includes/modules/tooltip";
+@import "includes/modules/loader";
+
+@import "includes/components/form";
+@import "includes/components/border";
+@import "includes/components/popup";
+@import "includes/components/chart";
+@import "includes/components/footnotes";
+@import "includes/components/about";
+
+
+
+

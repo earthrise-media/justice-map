@@ -1,0 +1,15 @@
+.border {
+    border-left: 9px solid $color-black;
+
+    &--right {
+        border-left: none;
+        border-right: 9px solid $color-black;
+    }
+
+    @each $label, $color in $border-colors {
+        &--#{$label} {
+            border-color: $color;
+        }
+    }
+
+}

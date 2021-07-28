@@ -1,0 +1,64 @@
+.chart {
+    &__slider {
+        position: absolute;
+        bottom: 12px;
+        right: 22px;
+        width: 290px;
+        height: 40px;
+        background: none;
+        border-left: none;
+        border-right: none;
+        border-radius: 0;
+        cursor: pointer;
+        box-shadow: none;
+        border-top: none;
+
+        .noUi-connect {
+            background: rgba(#D0D7DA, .6);
+        }
+
+        .noUi-handle {
+            top: 0;
+            background: none;
+            border: none;
+            height: 40px;
+            // width: 10px;
+            box-shadow: none;
+            cursor: grab;
+
+
+            &::before {
+                width: 0;
+                background: none;
+                height: 0;
+                left: 9px;
+                top: 17px;
+                border-style: solid;
+                border-width: 4px 4px 4px 0;
+                border-color: transparent currentColor transparent transparent;
+            }
+
+            &.noUi-handle-upper {
+                &::before {
+                    left: 23px;
+                    border-width: 4px 0 4px 4px;
+                    border-color: transparent transparent transparent currentColor;
+                }
+            }
+            &::after {
+                background: $color-blue;
+                top: 10px;
+                width: 2px;
+                height: 20px;
+                border-radius: 2px;
+            }
+        }
+    }
+
+
+    &__range {
+        @include font-size(15, 15);
+        text-align: center;
+        margin-bottom: 5px;
+    }
+}

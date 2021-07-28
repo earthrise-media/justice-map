@@ -1,0 +1,11 @@
+
+$time: 0.5s;
+$time-fast: 0.25s;
+
+$ease-in: cubic-bezier(0.895, 0.03, 0.685, 0.22); //quart
+$ease-out: cubic-bezier(0.165, 0.84, 0.44, 1);
+$ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+$ease-out-back: cubic-bezier(0.175, 0.885, 0.320, 1.275);
+$ease-custom: cubic-bezier(0.5, 0, 0.2, 1);
+
+$easing: $ease-custom;

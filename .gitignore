@@ -1,36 +1,44 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
-/processing
-
-# dependencies
-/node_modules
-/.pnp
-.pnp.js
-
-# testing
-/coverage
-
-# next.js
-/.next/
-/out/
-
-# production
-/build
-
-# misc
+*.log
+*.old
 .DS_Store
-*.pem
+phpcs*.tmp
+*.swp
+.sass-cache
+.sass-cache/*
+cache
+cache/*
 
-# debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+node_modules
+build/node_modules
+build/node_modules/*
+build/.gulp/
+build/.gulp/*
 
-# local env files
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+reports/*
+reports
 
-# vercel
-.vercel
+public/upload/*
+public/upload
+
+serdelia-link
+serdelia-link/*
+
+_uho
+_uho/*
+_dane
+_dane/*
+_data
+_data/*
+
+*.sublime-project
+*.sublime-workspace
+.sublime-gulp.cache
+
+.idea
+
+.gulp
+.gulp/*
+
+docker-compose.yml
+
+.vscode

@@ -1,0 +1,35 @@
+
+$color-white:       #fff;
+$color-black:       #000;
+$color-pale:        #F1F1F1;
+$color-dark:        #1f232b;
+$color-gray:        #5b5f69;
+$color-silver:      #979797;
+$color-red:         #CB1717;
+$color-blue:        #171E30;
+
+$color-transparent: rgba(0, 0, 0, 0);
+
+$gradient: linear-gradient(180deg, #2F405E 0%, #151E30 100%);
+
+$color-bg:          $color-black;
+$color-text:        $color-white;
+
+$color-primary:     $color-blue;
+$color-secondary:   $color-gray;
+$color-error:       $color-red;
+$color-success:     $color-blue;
+$color-warning:     $color-red;
+$color-info:        $color-gray;
+
+$color-line:        $color-silver;
+$color-link:        $color-primary;
+$color-select-bg:   $color-primary;
+$color-select-text: $color-white;
+
+$border-colors: (
+    red: $color-red,
+    pale: $color-pale,
+    blue: $color-blue,
+    tooltip: rgba(#537686, .2),
+);

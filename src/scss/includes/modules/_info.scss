@@ -1,0 +1,57 @@
+.info {
+    @include z-index(info);
+    position: absolute;
+    top: $margin * 2 + $menu-height;
+    left: 0;
+    width: $menu-width;
+    height: 100%;
+    max-height: calc(var(--app-height) * .55);
+    background: rgba($color: $color-blue, $alpha: .34);
+    display: none;
+    opacity: 0;
+    transform: translateX(-100%);
+
+    @media (max-height: 640px) {
+        max-height: 300px;
+    }
+
+    &__head {
+        position: relative;
+        text-align: center;
+        padding: 20px 60px;
+
+        &::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 12px;
+            width: calc(100% - 24px);
+            height: 1px;
+            background-color: $color-silver;
+        }
+    }
+
+
+    &__heading {
+        @include font-size(15, 18);
+        font-family: $font-title;
+        font-weight: 400;
+        margin-top: 18px;
+    }
+
+
+    &__content {
+        padding: 20px 40px;
+        text-align: center;
+        @include font-size(15, 20);
+
+        @media (max-height: 670px) {
+            font-size: 13px;
+        }
+
+        @media (max-height: 640px) {
+            font-size: 12px;
+        }
+        p + p {margin-top: 15px;}
+    }
+}

@@ -1,0 +1,37 @@
+// get breakpoint value in .js:
+// https://www.lullabot.com/articles/importing-css-breakpoints-into-javascript
+// and… let's use mobile-first!
+body::before {
+    display: none;
+    @include breakpoint(phone) { content: "phone"; }
+    @include breakpoint(tablet) { content: "tablet"; }
+    @include breakpoint(desktop) { content: "desktop"; }
+}
+
+
+// Just Phones
+@include breakpoint(phone) {
+    .phone-hide,
+    %phone-hide { display: none !important; }
+}
+
+
+// Tablet & Desktop
+@include breakpoint(tablet) {
+    .tablet-hide,
+    %tablet-hide { display: none !important; }
+}
+
+
+// Desktop
+@include breakpoint(desktop) {
+    .desktop-hide,
+    %desktop-hide { display: none !important; }
+}
+
+
+// Not Desktop
+@include breakpoint(not-desktop) {
+    .desktop-only,
+    %desktop-only { display: none !important; }
+}

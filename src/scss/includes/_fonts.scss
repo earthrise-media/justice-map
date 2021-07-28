@@ -1,0 +1,70 @@
+/*------------------------------------*\
+    #FONTS
+\*------------------------------------*/
+
+@mixin load-font($name, $weight: 400, $style: normal) {
+
+    $fontpath: "./fonts/#{$name}/#{$name}";
+    $fontname: "#{$name}";
+
+    @if ($style != normal and $weight != 400) {
+        $fontpath: "./fonts/#{$name}/#{$name}#{$weight}#{$style}";
+        $fontname: "#{$name}#{$weight}#{$style}";
+    } @else if ($weight != 400) {
+        $fontpath: "./fonts/#{$name}/#{$name}#{$weight}";
+        $fontname: "#{$name}#{$weight}";
+    } @else if ($style != normal) {
+        $fontpath: "./fonts/#{$name}/#{$name}#{$style}";
+        $fontname: "#{$name}#{$style}";
+    }
+
+    font-family: $name;
+    font-weight: $weight;
+    font-style: $style;
+    font-display: auto;
+
+    src: url("#{$fontpath}.woff2") format("woff2"), // Super Modern Browsers
+         url("#{$fontpath}.woff") format("woff"), // Pretty Modern Browsers
+}
+
+// load custom fonts:
+// @font-face { @include load-font($font-text); }
+// @font-face { @include load-font($font-title); }
+// @font-face { @include load-font($font-comic); }
+
+
+
+
+$fonts: (
+    text: ($font-text, sans-serif),
+    title: ($font-title, sans-serif),
+);
+
+
+@function font($font) {
+    @if map-has-key($fonts, $font) {
+        @return map-get($fonts, $font);
+    } @else {
+        @warn "Invalid font name: #{$font}.";
+        @return null;
+    }
+}
+
+
+@mixin font-family($family, $weight: "", $style: "") {
+    font-family: font($family);
+    @if $weight != "" { font-weight: unquote("" + $weight); }
+    @if $style != "" { font-style: unquote("" + $style); }
+}
+
+
+@each $label, $font in $fonts {
+    .font-#{$label} { @include font-family($label); }
+}
+
+
+@for $i from 1 through 9 {
+    .fw-#{$i} {
+        font-weight: $i * 100 !important;
+    }
+}

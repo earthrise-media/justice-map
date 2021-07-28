@@ -1,0 +1,13 @@
+.menu {
+    @include z-index(menu);
+    position: absolute;
+    top: $margin;
+    left: 0;
+    width: $menu-width;
+    height: 200px;
+    color: $color-blue;
+    background: $color-pale;
+    opacity: 0;
+    transform: translateX(-100%);
+
+}

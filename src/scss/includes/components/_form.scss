@@ -1,0 +1,108 @@
+.form {
+
+
+    &__items {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100px;
+        @include flex();
+
+        &::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 12px;
+            width: calc(100% - 24px);
+            height: 1px;
+            background-color: rgba($color-silver, .37);
+        }
+    }
+
+
+    &__item {
+        position: relative;
+        width: 25%;
+        height: 100%;
+        text-transform: uppercase;
+
+
+        label {
+            @include flex(column, center, center);
+            width: 100%;
+            height: 100%;
+            transition: color $time $ease-custom;
+
+            @include hover {
+                color: $color-red;
+            }
+
+            svg {
+                margin-bottom: 8px;
+
+                > * {stroke: currentColor;}
+            }
+        }
+
+        &--checkbox {
+
+            &::after {
+                content: "";
+                position: absolute;
+                right: 0;
+                top: 14px;
+                height: calc(100% - 28px);
+                width: 1px;
+                background-color: rgba($color-silver, .37);
+            }
+
+            &:last-of-type {
+                &::after {content: none;}
+            }
+
+            input {position: absolute;}
+
+            input:checked + label {
+                color: $color-red;
+            }
+        }
+    }
+
+
+    &__heading {
+        padding: $margin - 2;
+        text-align: center;
+        font-family: $font-title;
+        font-weight: 300;
+        text-transform: uppercase;
+        @include font-size(32, 32);
+
+        .number {
+            font-size: 28px;
+            display: inline-block;
+            margin-left: 5px;
+            color: $color-red;
+            font-family: $font-text;
+            font-weight: 700;
+        }
+    }
+
+
+    &__subtitle {
+        margin-top: 5px;
+        text-align: center;
+        @include font-size(15, 15);
+    }
+
+
+    &__line {
+        position: absolute;
+        width: 60px;
+        height: 1px;
+        top: 0;
+        left: 12px;
+        background: $color-red;
+        transform: scaleX(0);
+    }
+}

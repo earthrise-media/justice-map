@@ -1,0 +1,49 @@
+.popup {
+    overflow: hidden;
+    border-radius: 5px;
+
+    &__wrap {
+        @include flex;
+    }
+
+
+    &__image {
+        overflow: hidden;
+        position: relative;
+        flex-shrink: 0;
+        width: 111px;
+        height: 111px;
+        background: $color-white;
+
+        img {
+            display: block;
+            // position: absolute;
+            // width: 300%;
+            // top: 50%;
+            // left: 50%;
+            // transform: translateX(-50%) translateY(-50%);
+            // max-width: none;
+        }
+    }
+
+
+    &__copy {
+        padding: 9px 18px;
+
+        .name {
+            font-family: $font-text;
+            white-space: nowrap;
+            text-transform: uppercase;
+            @include font-size(15, 21);
+            color: $color-blue;
+            font-weight: 300;
+        }
+
+        .number {
+            font-family: $font-title;
+            color: $color-red;
+            font-weight: 700;
+            @include font-size(26, 39);
+        }
+    }
+}

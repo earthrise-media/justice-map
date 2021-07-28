@@ -1,0 +1,44 @@
+.about {
+    @include z-index(info);
+    position: absolute;
+    bottom: $footer-height + 20;
+    right: 0;
+    width: $menu-width;
+    color: $color-blue;
+    background: $color-pale;
+    padding: 22px 22px 15px;
+    @include font-size(16, 21);
+    display: none;
+    opacity: 0;
+
+    &::after {
+        content: "";
+        position: absolute;
+        bottom: -8px;
+        right: 21px;
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 8px 8.5px 0px 8.5px;
+        border-color: $color-pale transparent transparent transparent;
+    }
+
+    &__image {
+        display: block;
+        margin: 0 auto;
+        width: 210px;
+    }
+
+
+    &__heading {
+        @include font-size(15, 18);
+        font-family: $font-title;
+        font-weight: 500;
+        text-transform: uppercase;
+        text-align: center;
+        margin-top: 9px;
+        margin-bottom: 17px;
+    }
+
+    p {margin-bottom: 30px;}
+}

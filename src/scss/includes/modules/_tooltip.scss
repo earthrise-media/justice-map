@@ -1,0 +1,130 @@
+.tooltip {
+    @include z-index(tooltip);
+    position: absolute;
+    top: $margin * 2 + $menu-height;
+    left: 0;
+    width: $menu-width;
+    height: 100%;
+    max-height: 360px;
+    color: $color-blue;
+    opacity: 0;
+    // transform: translateX(-100%);
+
+
+    &__item {
+        background: $color-pale;
+        position: absolute;
+        padding: 0 0 9px;
+        opacity: 0;
+
+        $left: 33px;
+
+        &::after {
+            content: "";
+            position: absolute;
+            top: -8px;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 0 8.5px 8px 8.5px;
+            border-color: transparent transparent $color-pale transparent;
+        }
+
+        @for $var from 1 to 5 {
+            &:nth-of-type(#{$var}) {
+                &::after {
+                    left: $left + 82px * ($var - 1);
+                }
+            }
+        }
+
+
+    }
+
+
+    &__wrap {
+        position: relative;
+
+        .helper {
+            position: absolute;
+            left: 50%;
+            top: calc(50% + 6px);
+            transform: translateX(-50%) translateY(-50%);
+
+            text-align: center;
+            @include font-size(15, 21);
+
+            svg {width: 41px;margin-bottom: 10px;}
+        }
+    }
+
+
+    &__group {
+        position: relative;
+        padding: 12px 22px 12px 17px;
+        @include font-size(15, 20);
+
+        &::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 12px;
+            width: calc(100% - 24px);
+            height: 1px;
+            background-color: #D0D7DA;
+        }
+
+        &:last-of-type {
+            &::after {content: none;}
+        }
+
+        &--chart,
+        &--impact {opacity: 0;}
+        &--footnotes {padding-bottom: 0; padding-right: 10px;}
+    }
+
+
+    &__heading {
+        @include font-size(15, 18);
+        font-family: $font-title;
+        font-weight: 500;
+        text-transform: uppercase;
+        text-align: center;
+        margin-bottom: 5px;
+    }
+
+
+    &__info {
+        position: relative;
+        width: 50%;
+        margin-left: 50%;
+        margin-bottom: 10px;
+
+        .number {
+            position: absolute;
+            @include font-size(26, 26);
+            font-weight: 700;
+            color: $color-red;
+            left: -23px;
+            transform: translateX(-100%);
+        }
+
+        .name {
+            text-transform: uppercase;
+            @include font-size(15, 26);
+        }
+
+        &::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -12px;
+            width: 1px;
+            height: 100%;
+            background-color: rgba($color-silver, .37);
+        }
+
+        &:last-of-type {margin-bottom: 0;}
+    }
+}

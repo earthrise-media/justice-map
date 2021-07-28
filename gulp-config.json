@@ -1,0 +1,39 @@
+{
+    "paths": {
+        "sass": {
+            "main": "src/scss/main.scss",
+            "dest": "dist"
+        },
+        "styles": {
+            "main": ["src/scss/**/*.scss"]
+        },
+        "scripts": {
+            "ts": "src/ts/**/*.ts",
+            "mainTs": "src/ts/App.ts",
+            "definitions": "src/ts/**/*.d.ts",
+            "plugins": "src/js/plugins/*.js",
+            "libs": [
+            ],
+            "dest": "dist"
+        },
+        "images": {
+            "source": "src/images/*.+(jpg|png|gif|svg|jpeg)",
+            "dest": "dist/images"
+        },
+        "fonts": {
+            "source": "src/fonts/**/*",
+            "dest": "dist/fonts"
+        },
+        "videos": {
+            "source": "src/videos/**/*",
+            "dest": "dist/videos"
+        },
+        "favicons": {
+            "source": "src/favicons/**/*",
+            "dest": "dist/favicons"
+        },
+        "html": {
+            "main": "./index.html"
+        }
+    }
+}
